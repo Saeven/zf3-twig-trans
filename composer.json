@@ -1,0 +1,38 @@
+{
+    "name":         "saeven/zf2-circlical-trans",
+    "description":  "ZF2 module that glues Twig's {% trans %} and the standard translator together",
+    "type":         "library",
+    "license":      "MIT",
+    "homepage":     "https://github.com/Saeven/zf2-circlical-trans",
+    "keywords": [
+        "zf2",
+        "twig",
+        "trans",
+        "translator",
+        "i18n"
+    ],
+    "authors": [
+        {
+            "name":      "Alexandre Lemaire",
+            "email":     "alemaire@circlical.com",
+            "homepage":  "http://circlical.com/",
+            "role":      "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.5",
+        "zendframework/zendframework" : "2.3.*",
+        "zf-commons/zfc-twig" : "1.2.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "CirclicalTwigTrans\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.1-dev"
+        }
+    }
+}
