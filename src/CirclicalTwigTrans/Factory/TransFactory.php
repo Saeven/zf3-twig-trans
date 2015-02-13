@@ -38,16 +38,9 @@ class TransFactory implements FactoryInterface
 {
     public function createService( ServiceLocatorInterface $serviceLocator )
     {
-        /**
-         * @var \Doctrine\Common\Persistence\ObjectRepository $userRepository
-         * @var \Zend\InputFilter\InputFilterPluginManager $serviceLocator
-         */
-
-        $serviceManager = $serviceLocator->getServiceLocator();
-
         return new Trans(
-            $serviceManager->get('ZfcTwigRenderer'),
-            $serviceManager->get('translator' )
+            $serviceLocator->get('ZfcTwigRenderer'),
+            $serviceLocator->get('translator' )
         );
     }
 }
