@@ -6,4 +6,3 @@
  * It allows usage of this module even without composer.
  */
 require_once __DIR__ . '/src/CirclicalTwigTrans/Module.php';
-	
