@@ -5,8 +5,8 @@
 `""*3b..											
      ""*3o.					  						2/13/15 5:03 PM
          "33o.			                  			S. Alexandre M. Lemaire
-           "*33o.                                 	(c) Launchfire Interactive Inc.
-              "333o.								Redistribution of these files is illegal.
+           "*33o.
+              "333o.
                 "3333bo...       ..o:
                   "33333333booocS333    ..    ,.
                ".    "*3333SP     V3o..o33. .333b
