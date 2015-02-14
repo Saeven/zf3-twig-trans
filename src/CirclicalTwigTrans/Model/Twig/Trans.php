@@ -33,7 +33,7 @@ namespace CirclicalTwigTrans\Model\Twig;
 
 use Zend\Mvc\I18n\Translator;
 
-class Trans extends \ZfcTwig\Twig\Extension\ZfcTwig
+class Trans extends \ZfcTwig\Twig\Extension
 {
 
     /**
@@ -46,10 +46,9 @@ class Trans extends \ZfcTwig\Twig\Extension\ZfcTwig
     /**
      * Constructor.
      *
-     * @param \ZfcTwig\View\Renderer\TwigRenderer $renderer
      * @param Translator $trans
      */
-    public function __construct( \ZfcTwig\View\Renderer\TwigRenderer $renderer, Translator $trans)
+    public function __construct( \ZfcTwig\View\TwigRenderer $renderer, Translator $trans)
     {
         $this->renderer     = $renderer;
         $this->translator   = $trans;

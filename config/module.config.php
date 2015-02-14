@@ -6,6 +6,9 @@ use CirclicalTwigTrans\Factory\TransFactory;
 return [
 
     'service_manager' => [
+        'aliases' => [
+            'translator' => 'MvcTranslator',
+        ],
         'factories' => [
             Trans::class => TransFactory::class,
         ],
