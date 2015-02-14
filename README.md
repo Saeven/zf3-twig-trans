@@ -34,8 +34,9 @@ By loading CirclicalTwigTrans, you will be setting an alias from 'translator' to
 Use 
 
 ```twig
-{% trans "This is a sentence" %} to translate that string.
+{% trans "This is a sentence" %} 
 ```
+to translate that string.
 
 You can also do pluralization with:
 
@@ -46,6 +47,7 @@ You can also do pluralization with:
 {% plural pill_count %}
    Hi {{ name }}, I took {{ pill_count }} blue pills.
 {% endtrans %}
+```
 
 You can test it with the ZF2 Skeleton, by translating "Home" to "fr_CA" which becomes "Acceuil" (good test).
 
