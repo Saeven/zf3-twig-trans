@@ -32,7 +32,7 @@ By loading CirclicalTwigTrans, you will be setting an alias from 'translator' to
 It's assumed that you are managing locale in your app's bootstrap.  For example, in your Application module's onBootstrap:
 
 ```php
- public function onBootstrap(MvcEvent $e)
+public function onBootstrap(MvcEvent $e)
 {
 
     $translator = $e->getApplication()->getServiceManager()->get('translator');
