@@ -29,6 +29,19 @@ In your module's application.config.php, make sure you've got these modules load
 
 By loading CirclicalTwigTrans, you will be setting an alias from 'translator' to 'MvcTranslator'.  If you have an existing translator alias in your system, please remove it.
 
+It's assumed that you are managing locale in your app's bootstrap.  For example, in your Application module's onBootstrap:
+
+```php
+public function onBootstrap(MvcEvent $e)
+{
+
+    $translator = $e->getApplication()->getServiceManager()->get('translator');
+    $translator
+        ->setLocale( 'fr_CA' )
+        ->setFallbackLocale( 'en_US' );
+}
+```
+
 ### Usage
 
 Use 
