@@ -150,7 +150,7 @@ Usage in controllers doesn't change.
 $tr = $sm->get('translator');
 
 $tr->translate( 'Home' );
-$tr->translate( 'Home', 'alcatraz' );
+$tr->translate( 'Sorry', 'errors' );
 
 
 $num = 422;
