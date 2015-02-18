@@ -1,12 +1,11 @@
 <?php
 
-
 /**
 ,,
 `""*3b..											
-     ""*3o.					  						11/11/13 12:40 PM
+     ""*3o.
          "33o.			                  			S. Alexandre M. Lemaire
-           "*33o.
+           "*33o.                                   alemaire@circlical.com
               "333o.
                 "3333bo...       ..o:
                   "33333333booocS333    ..    ,.
@@ -31,9 +30,12 @@
 
 namespace CirclicalTwigTrans\Model\Twig;
 
+use CirclicalTwigTrans\Model\Twig\Parser\TransParser;
 use Zend\Mvc\I18n\Translator;
+use ZfcTwig\Twig\Extension;
+use ZfcTwig\View\TwigRenderer;
 
-class Trans extends \ZfcTwig\Twig\Extension
+class Trans extends Extension
 {
 
     /**
@@ -41,17 +43,22 @@ class Trans extends \ZfcTwig\Twig\Extension
      */
     protected $renderer;
 
+
+    /**
+     * @var Translator
+     */
     protected $translator;
+
 
     /**
      * Constructor.
      *
-     * @param Translator $trans
+     * @param TwigRenderer $renderer
      */
-    public function __construct( \ZfcTwig\View\TwigRenderer $renderer, Translator $trans)
+    public function __construct( TwigRenderer $renderer, Translator $translator )
     {
         $this->renderer     = $renderer;
-        $this->translator   = $trans;
+        $this->translator   = $translator;
     }
 
 
@@ -62,9 +69,23 @@ class Trans extends \ZfcTwig\Twig\Extension
      */
     public function getTokenParsers()
     {
-        return array( new TransParser( $this->translator ) );
+        // best place to set locale I could find, because of how the module loader works
+        $locale = $this->translator->getLocale();
+        putenv( 'LANG=' . $locale );
+        setlocale( LC_ALL, $locale );
+
+        return array( new TransParser( $this->transaltor ) );
     }
 
+    public function decideForFork(Twig_Token $token)
+    {
+        return $token->test(array('plural', 'from', 'notes', 'endtrans'));
+    }
+
+    public function decideForEnd(Twig_Token $token)
+    {
+        return $token->test('endtrans');
+    }
 
     /**
      * Returns the name of the extension.
@@ -73,7 +94,7 @@ class Trans extends \ZfcTwig\Twig\Extension
      */
     public function getName()
     {
-        return 'launchfire-translator';
+        return 'circlical-translator';
     }
 }
 

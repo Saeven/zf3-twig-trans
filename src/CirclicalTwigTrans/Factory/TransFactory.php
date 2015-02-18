@@ -3,9 +3,9 @@
 /**
 ,,
 `""*3b..											
-     ""*3o.					  						2/13/15 5:03 PM
+     ""*3o.
          "33o.			                  			S. Alexandre M. Lemaire
-           "*33o.
+           "*33o.                                   alemaire@circlical.com
               "333o.
                 "3333bo...       ..o:
                   "33333333booocS333    ..    ,.
@@ -36,11 +36,20 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class TransFactory implements FactoryInterface
 {
+    const DOMAIN = 'text_domain';
+
     public function createService( ServiceLocatorInterface $serviceLocator )
     {
+        $config     = $serviceLocator->get('config');
+        $trcfg      = $config['translator']['translation_file_patterns'][0];
+
+        bindtextdomain($trcfg[self::DOMAIN], realpath( $trcfg['base_dir'] ) . '/');
+        textdomain($trcfg[self::DOMAIN]);
+        bind_textdomain_codeset($trcfg[self::DOMAIN], 'UTF-8');
+
         return new Trans(
             $serviceLocator->get('ZfcTwigRenderer'),
-            $serviceLocator->get('translator' )
+            $serviceLocator->get('translator')
         );
     }
 }
