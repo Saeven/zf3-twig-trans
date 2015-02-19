@@ -72,7 +72,7 @@ class Trans extends Extension
         // best place to set locale I could find, because of how the module loader works
         $locale = $this->translator->getLocale();
         putenv( 'LANG=' . $locale );
-        setlocale( LC_ALL, $locale );
+        setlocale( LC_MESSAGES, $locale . ".utf-8" );
 
         return array( new TransParser( $this->transaltor ) );
     }
