@@ -45,9 +45,10 @@ class TransFactory implements FactoryInterface
         foreach( $config['translator']['translation_file_patterns'] as $trcfg )
         {
             bindtextdomain( $trcfg[self::DOMAIN], realpath( $trcfg['base_dir'] ) . '/' );
-            textdomain( $trcfg[self::DOMAIN] );
             bind_textdomain_codeset( $trcfg[self::DOMAIN], 'UTF-8' );
         }
+
+        textdomain( "default" );
 
         return new Trans(
             $serviceLocator->get('ZfcTwigRenderer'),
