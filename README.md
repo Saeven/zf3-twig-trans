@@ -4,6 +4,8 @@ Magic glue to create the expected experience when developing with ZfcTwig, the M
 
 > New! This module supports text domains!
 
+Inspired by ZfcTwig and its extensions project at https://github.com/twigphp/Twig-extensions
+
 
 ### Requirements
 
@@ -97,7 +99,7 @@ You need to tweak your translator configuration to support this file structure, 
     ),
 ```
 
-* The MvcTranslator will behave properly, it does support domains *
+*The MvcTranslator will behave properly, it does support domains*
 
 
 ### Usage

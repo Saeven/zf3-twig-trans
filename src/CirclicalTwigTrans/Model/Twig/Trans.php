@@ -34,6 +34,7 @@ use CirclicalTwigTrans\Model\Twig\Parser\TransParser;
 use Zend\Mvc\I18n\Translator;
 use ZfcTwig\Twig\Extension;
 use ZfcTwig\View\TwigRenderer;
+use Twig_Token;
 
 class Trans extends Extension
 {
@@ -74,7 +75,7 @@ class Trans extends Extension
         putenv( 'LANG=' . $locale );
         setlocale( LC_MESSAGES, $locale . ".utf-8" );
 
-        return array( new TransParser( $this->transaltor ) );
+        return array( new TransParser( $this->translator ) );
     }
 
     public function decideForFork(Twig_Token $token)
