@@ -56,7 +56,7 @@ class Trans extends Extension
      *
      * @param TwigRenderer $renderer
      */
-    public function __construct( TwigRenderer $renderer, Translator $translator )
+    public function __construct( TwigRenderer $renderer, Translator $translator = null )
     {
         $this->renderer     = $renderer;
         $this->translator   = $translator;
@@ -71,10 +71,14 @@ class Trans extends Extension
     public function getTokenParsers()
     {
         // best place to set locale I could find, because of how the module loader works
-        $locale = $this->translator->getLocale();
-        putenv( 'LANG=' . $locale );
-        setlocale( LC_MESSAGES, $locale . ".utf-8" );
-
+        // translator is optional to facilitate extraction, use Factory to create in production
+        if( $this->translator )
+        {
+        	$locale = $this->translator->getLocale();
+        	putenv( 'LANG=' . $locale );
+        	setlocale( LC_MESSAGES, $locale . ".utf-8" );
+        }
+        
         return array( new TransParser( $this->translator ) );
     }
 
