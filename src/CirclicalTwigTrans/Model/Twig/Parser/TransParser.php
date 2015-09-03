@@ -32,7 +32,7 @@ namespace CirclicalTwigTrans\Model\Twig\Parser;
 
 use CirclicalTwigTrans\Model\Twig\TransNode;
 use Twig_Token;
-use Twig_NodeInterface;
+use Twig_Node;
 use Twig_Node_Text;
 use Twig_Node_Print;
 use Twig_Node_Expression_Name;
@@ -135,7 +135,7 @@ class TransParser extends \Twig_Extensions_TokenParser_Trans
         return 'trans';
     }
 
-    protected function checkTransString(Twig_NodeInterface $body, $lineno)
+    protected function checkTransString(Twig_Node $body, $lineno)
     {
         foreach ($body as $i => $node) {
             if ( $node instanceof Twig_Node_Text || ($node instanceof Twig_Node_Print && $node->getNode('expr') instanceof Twig_Node_Expression_Name ) )
