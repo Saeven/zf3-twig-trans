@@ -101,6 +101,8 @@ You need to tweak your translator configuration to support this file structure, 
 
 *The MvcTranslator will behave properly, it does support domains*
 
+> A common gotcha here, is that your text domain MUST match the name of your .mo file
+
 
 ### Usage
 
