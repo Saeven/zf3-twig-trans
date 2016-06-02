@@ -38,21 +38,20 @@ class TransFactory implements FactoryInterface
 {
     const DOMAIN = 'text_domain';
 
-    public function createService( ServiceLocatorInterface $serviceLocator )
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config     = $serviceLocator->get('config');
+        $config = $serviceLocator->get('config');
 
-        foreach( $config['translator']['translation_file_patterns'] as $trcfg )
-        {
-            bindtextdomain( $trcfg[self::DOMAIN], realpath( $trcfg['base_dir'] ) . '/' );
-            bind_textdomain_codeset( $trcfg[self::DOMAIN], 'UTF-8' );
+        foreach ($config['translator']['translation_file_patterns'] as $trcfg) {
+            bindtextdomain($trcfg[self::DOMAIN], realpath($trcfg['base_dir']) . '/');
+            bind_textdomain_codeset($trcfg[self::DOMAIN], 'UTF-8');
         }
 
-        textdomain( "default" );
+        textdomain("default");
 
         return new Trans(
             $serviceLocator->get('ZfcTwigRenderer'),
-            (isset( $config['translator']['use_mvc'] ) && $config['translator']['use_mvc'] ) ? $serviceLocator->get('translator') : null
+            $serviceLocator->get('translator')
         );
     }
 }

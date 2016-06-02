@@ -56,10 +56,10 @@ class Trans extends Extension
      *
      * @param TwigRenderer $renderer
      */
-    public function __construct( TwigRenderer $renderer, Translator $translator = null )
+    public function __construct(TwigRenderer $renderer, Translator $translator = null)
     {
-        $this->renderer     = $renderer;
-        $this->translator   = $translator;
+        $this->renderer = $renderer;
+        $this->translator = $translator;
     }
 
 
@@ -72,15 +72,13 @@ class Trans extends Extension
     {
         // best place to set locale I could find, because of how the module loader works
         // translator is optional to facilitate extraction, use Factory to create in production
-        if( $this->translator )
-        {
-        	$locale = $this->translator->getLocale();
-        	putenv( 'LANG=' . $locale );
-        	setlocale( LC_MESSAGES, $locale . ".utf-8" );
-            return array( new MVCTransParser( $this->translator ) );
+        if ($this->translator) {
+            $locale = $this->translator->getLocale();
+            putenv('LANG=' . $locale);
+            setlocale(LC_MESSAGES, $locale . ".utf-8");
         }
 
-        return array( new TransParser() );
+        return array(new TransParser($this->translator));
     }
 
     public function decideForFork(Twig_Token $token)

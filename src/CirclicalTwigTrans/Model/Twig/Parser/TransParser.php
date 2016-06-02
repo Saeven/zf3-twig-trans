@@ -42,7 +42,7 @@ class TransParser extends \Twig_Extensions_TokenParser_Trans
 {
 
     const DECIDE_FORK = 'decideForFork';
-    const DECIDE_END  = 'decideForEnd';
+    const DECIDE_END = 'decideForEnd';
 
     /**
      * Parses a token and returns a node.
@@ -53,69 +53,57 @@ class TransParser extends \Twig_Extensions_TokenParser_Trans
      */
     public function parse(Twig_Token $token)
     {
-        $lineno         = $token->getLine();
-        $stream         = $this->parser->getStream();
-        $count          = null;
-        $plural         = null;
-        $notes          = null;
-        $text_domain    = null;
-        $initial_block  = false;
+        $lineno = $token->getLine();
+        $stream = $this->parser->getStream();
+        $count = null;
+        $plural = null;
+        $notes = null;
+        $text_domain = null;
+        $initial_block = false;
 
 
-        if (!$stream->test(Twig_Token::BLOCK_END_TYPE))
-        {
-            if ($stream->nextIf(Twig_Token::NAME_TYPE, 'from'))
-            {
+        if (!$stream->test(Twig_Token::BLOCK_END_TYPE)) {
+            if ($stream->nextIf(Twig_Token::NAME_TYPE, 'from')) {
                 $text_domain = $stream->expect(Twig_Token::STRING_TYPE)->getValue();
-            }
-            else
-            {
+            } else {
                 $body = $this->parser->getExpressionParser()->parseExpression();
                 $initial_block = true;
             }
         }
 
-        if( !$initial_block && $stream->test( Twig_Token::BLOCK_END_TYPE ) )
-        {
+        if (!$initial_block && $stream->test(Twig_Token::BLOCK_END_TYPE)) {
             $stream->expect(Twig_Token::BLOCK_END_TYPE);
-            $body = $this->parser->subparse(array($this, self::DECIDE_FORK ));
+            $body = $this->parser->subparse(array($this, self::DECIDE_FORK));
             $next = $stream->next()->getValue();
 
-            if ('plural' === $next)
-            {
-                $count  = $this->parser->getExpressionParser()->parseExpression();
+            if ('plural' === $next) {
+                $count = $this->parser->getExpressionParser()->parseExpression();
                 $stream->expect(Twig_Token::BLOCK_END_TYPE);
-                $plural = $this->parser->subparse(array($this, self::DECIDE_FORK ));
+                $plural = $this->parser->subparse(array($this, self::DECIDE_FORK));
 
-                if ('notes' === $stream->next()->getValue())
-                {
+                if ('notes' === $stream->next()->getValue()) {
                     $stream->expect(Twig_Token::BLOCK_END_TYPE);
                     $notes = $this->parser->subparse(array($this, self::DECIDE_END), true);
                 }
-            }
-            elseif ('notes' === $next)
-            {
+            } elseif ('notes' === $next) {
                 $stream->expect(Twig_Token::BLOCK_END_TYPE);
                 $notes = $this->parser->subparse(array($this, self::DECIDE_END), true);
             }
         }
 
-        if( !$text_domain )
-        {
+        if (!$text_domain) {
             $stream->expect(Twig_Token::BLOCK_END_TYPE);
             $this->checkTransString($body, $lineno);
-        }
-        else
-        {
+        } else {
             $stream->expect(Twig_Token::BLOCK_END_TYPE);
         }
 
-        return new TransNode( $body, $text_domain, $plural, $count, $notes,  $lineno, $this->getTag() );
+        return new TransNode($body, $text_domain, $plural, $count, $notes, $lineno, $this->getTag());
     }
 
     public function decideForFork(Twig_Token $token)
     {
-        return $token->test( array('plural', 'notes', 'endtrans') );
+        return $token->test(array('plural', 'notes', 'endtrans'));
     }
 
     public function decideForEnd(Twig_Token $token)
@@ -127,7 +115,7 @@ class TransParser extends \Twig_Extensions_TokenParser_Trans
      * Gets the tag name associated with this token parser.
      *
      * @param string The tag name
-     * 
+     *
      * @return string
      */
     public function getTag()
@@ -138,7 +126,7 @@ class TransParser extends \Twig_Extensions_TokenParser_Trans
     protected function checkTransString(Twig_Node $body, $lineno)
     {
         foreach ($body as $i => $node) {
-            if ( $node instanceof Twig_Node_Text || ($node instanceof Twig_Node_Print && $node->getNode('expr') instanceof Twig_Node_Expression_Name ) )
+            if ($node instanceof Twig_Node_Text || ($node instanceof Twig_Node_Print && $node->getNode('expr') instanceof Twig_Node_Expression_Name))
                 continue;
 
             throw new Twig_Error_Syntax(sprintf('The text to be translated with "trans" can only contain references to simple variables'), $lineno);

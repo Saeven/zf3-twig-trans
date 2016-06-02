@@ -29,12 +29,11 @@
 */
 
 
-
 namespace CirclicalTwigTrans;
 
 
-
-class Module {
+class Module
+{
 
     /**
      * {@inheritDoc}
