@@ -215,9 +215,12 @@ class TransNode extends Twig_Node
         } else {
             /** @var Twig_Node $body */
             if (!$body->hasAttribute(self::TYPE_DATA)) {
-                throw new BlankTranslationException("You are attempting to translate a blank string", $body->getLine());
+                throw new BlankTranslationException("You are attempting to translate a empty string", $body->getLine());
             }
             $msg = $body->getAttribute(self::TYPE_DATA);
+            if (!trim($msg)) {
+                throw new BlankTranslationException("You are attempting to translate a blank string", $body->getLine());
+            }
         }
 
         return array(new Twig_Node(array(new Twig_Node_Expression_Constant(trim($msg), $body->getLine()))), $vars);
