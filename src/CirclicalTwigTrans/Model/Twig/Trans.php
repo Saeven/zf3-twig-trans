@@ -77,9 +77,10 @@ class Trans extends Extension
         	$locale = $this->translator->getLocale();
         	putenv( 'LANG=' . $locale );
         	setlocale( LC_MESSAGES, $locale . ".utf-8" );
+            return array( new MVCTransParser( $this->translator ) );
         }
-        
-        return array( new TransParser( $this->translator ) );
+
+        return array( new TransParser() );
     }
 
     public function decideForFork(Twig_Token $token)

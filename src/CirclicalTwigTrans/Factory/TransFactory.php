@@ -52,7 +52,7 @@ class TransFactory implements FactoryInterface
 
         return new Trans(
             $serviceLocator->get('ZfcTwigRenderer'),
-            $serviceLocator->get('translator')
+            (isset( $config['translator']['use_mvc'] ) && $config['translator']['use_mvc'] ) ? $serviceLocator->get('translator') : null
         );
     }
 }
