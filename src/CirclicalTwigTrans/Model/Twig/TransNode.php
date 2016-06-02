@@ -183,12 +183,18 @@ class TransNode extends Twig_Node
 
     /**
      * @param Twig_NodeInterface $body A Twig_NodeInterface instance
-     *
      * @return array
+     * @throws BlankTranslationException
      */
     protected function compileString(Twig_NodeInterface $body)
     {
+
         if ($body instanceof Twig_Node_Expression_Name || $body instanceof Twig_Node_Expression_Constant || $body instanceof Twig_Node_Expression_TempName) {
+            if( $body instanceof Twig_Node_Expression_Constant ){
+                if( !trim($body->getAttribute('value')) ){
+                    throw new BlankTranslationException("You are attempting to translate an empty string", $body->getLine());
+                }
+            }
             return array($body, array());
         }
 
@@ -218,9 +224,10 @@ class TransNode extends Twig_Node
                 throw new BlankTranslationException("You are attempting to translate a empty string", $body->getLine());
             }
             $msg = $body->getAttribute(self::TYPE_DATA);
-            if (!trim($msg)) {
-                throw new BlankTranslationException("You are attempting to translate a blank string", $body->getLine());
-            }
+        }
+
+        if (!trim($msg)) {
+            throw new BlankTranslationException("You are attempting to translate a blank string", $body->getLine());
         }
 
         return array(new Twig_Node(array(new Twig_Node_Expression_Constant(trim($msg), $body->getLine()))), $vars);
