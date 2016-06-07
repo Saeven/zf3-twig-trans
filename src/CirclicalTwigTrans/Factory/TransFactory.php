@@ -43,6 +43,9 @@ class TransFactory implements FactoryInterface
         $config = $serviceLocator->get('config');
 
         foreach ($config['translator']['translation_file_patterns'] as $trcfg) {
+            if (!array_key_exists(self::DOMAIN, $trcfg)) {
+                $trcfg[self::DOMAIN] = 'default';
+            }
             bindtextdomain($trcfg[self::DOMAIN], realpath($trcfg['base_dir']) . '/');
             bind_textdomain_codeset($trcfg[self::DOMAIN], 'UTF-8');
         }
