@@ -37,12 +37,16 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class TransFactory implements FactoryInterface
 {
     const DOMAIN = 'text_domain';
+    const DOMAIN_DEFAULT = 'default';
 
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('config');
 
         foreach ($config['translator']['translation_file_patterns'] as $trcfg) {
+            if (!array_key_exists(self::DOMAIN, $trcfg)) {
+                $trcfg[self::DOMAIN] = self::DOMAIN_DEFAULT;
+            }
             bindtextdomain($trcfg[self::DOMAIN], realpath($trcfg['base_dir']) . '/');
             bind_textdomain_codeset($trcfg[self::DOMAIN], 'UTF-8');
         }
