@@ -23,7 +23,9 @@
     "require": {
         "php": ">=5.5",
         "zf-commons/zfc-twig" : "*",
-        "twig/extensions": "1.4.0"
+        "twig/extensions": "1.4.0",
+        "zendframework/zend-servicemanager": "^3.0.1",
+        "zendframework/zend-mvc-i18n": "^1.0.0"
     },
     "autoload": {
         "psr-0": {

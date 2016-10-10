@@ -1,33 +1,5 @@
 <?php
 
-/**
-,,
-`""*3b..											
-     ""*3o.
-         "33o.			                  			S. Alexandre M. Lemaire
-           "*33o.                                   alemaire@circlical.com
-              "333o.
-                "3333bo...       ..o:
-                  "33333333booocS333    ..    ,.
-               ".    "*3333SP     V3o..o33. .333b
-                "33o. .33333o. ...A33333333333333b
-          ""bo.   "*33333333333333333333P*33333333:
-             "33.    V333333333P"**""*"'   VP  * "l
-               "333o.433333333X
-                "*3333333333333AoA3o..oooooo..           .b
-                       .X33333333333P""     ""*oo,,     ,3P
-                      33P""V3333333:    .        ""*****"
-                    .*"    A33333333o.4;      .
-                         .oP""   "333333b.  .3;
-                                  A3333333333P
-                                  "  "33333P"
-                                      33P*"
-		                              .3"
-                                     "
-                                     
-                                     
-*/
-
 namespace CirclicalTwigTrans\Model\Twig;
 
 use CirclicalTwigTrans\Model\Twig\Parser\TransParser;
@@ -78,12 +50,12 @@ class Trans extends Extension
             setlocale(LC_MESSAGES, $locale . ".utf-8");
         }
 
-        return array(new TransParser($this->translator));
+        return [new TransParser($this->translator)];
     }
 
     public function decideForFork(Twig_Token $token)
     {
-        return $token->test(array('plural', 'from', 'notes', 'endtrans'));
+        return $token->test(['plural', 'from', 'notes', 'endtrans']);
     }
 
     public function decideForEnd(Twig_Token $token)

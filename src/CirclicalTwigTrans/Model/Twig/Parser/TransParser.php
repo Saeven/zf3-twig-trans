@@ -1,33 +1,5 @@
 <?php
 
-/**
-,,
-`""*3b..
-     ""*3o.
-         "33o.			                  			S. Alexandre M. Lemaire
-           "*33o.                                   alemaire@circlical.com
-              "333o.
-                "3333bo...       ..o:
-                  "33333333booocS333    ..    ,.
-               ".    "*3333SP     V3o..o33. .333b
-                "33o. .33333o. ...A33333333333333b
-          ""bo.   "*33333333333333333333P*33333333:
-             "33.    V333333333P"**""*"'   VP  * "l
-               "333o.433333333X
-                "*3333333333333AoA3o..oooooo..           .b
-                       .X33333333333P""     ""*oo,,     ,3P
-                      33P""V3333333:    .        ""*****"
-                    .*"    A33333333o.4;      .
-                         .oP""   "333333b.  .3;
-                                  A3333333333P
-                                  "  "33333P"
-                                      33P*"
-		                              .3"
-                                     "
-
-
-*/
-
 namespace CirclicalTwigTrans\Model\Twig\Parser;
 
 use CirclicalTwigTrans\Model\Twig\TransNode;
@@ -73,21 +45,21 @@ class TransParser extends \Twig_Extensions_TokenParser_Trans
 
         if (!$initial_block && $stream->test(Twig_Token::BLOCK_END_TYPE)) {
             $stream->expect(Twig_Token::BLOCK_END_TYPE);
-            $body = $this->parser->subparse(array($this, self::DECIDE_FORK));
+            $body = $this->parser->subparse([$this, self::DECIDE_FORK]);
             $next = $stream->next()->getValue();
 
             if ('plural' === $next) {
                 $count = $this->parser->getExpressionParser()->parseExpression();
                 $stream->expect(Twig_Token::BLOCK_END_TYPE);
-                $plural = $this->parser->subparse(array($this, self::DECIDE_FORK));
+                $plural = $this->parser->subparse([$this, self::DECIDE_FORK]);
 
                 if ('notes' === $stream->next()->getValue()) {
                     $stream->expect(Twig_Token::BLOCK_END_TYPE);
-                    $notes = $this->parser->subparse(array($this, self::DECIDE_END), true);
+                    $notes = $this->parser->subparse([$this, self::DECIDE_END], true);
                 }
             } elseif ('notes' === $next) {
                 $stream->expect(Twig_Token::BLOCK_END_TYPE);
-                $notes = $this->parser->subparse(array($this, self::DECIDE_END), true);
+                $notes = $this->parser->subparse([$this, self::DECIDE_END], true);
             }
         }
 
@@ -103,7 +75,7 @@ class TransParser extends \Twig_Extensions_TokenParser_Trans
 
     public function decideForFork(Twig_Token $token)
     {
-        return $token->test(array('plural', 'notes', 'endtrans'));
+        return $token->test(['plural', 'notes', 'endtrans']);
     }
 
     public function decideForEnd(Twig_Token $token)
@@ -129,7 +101,7 @@ class TransParser extends \Twig_Extensions_TokenParser_Trans
             if ($node instanceof Twig_Node_Text || ($node instanceof Twig_Node_Print && $node->getNode('expr') instanceof Twig_Node_Expression_Name))
                 continue;
 
-            throw new Twig_Error_Syntax(sprintf('The text to be translated with "trans" can only contain references to simple variables'), $lineno);
+            throw new \Twig_Error_Syntax(sprintf('The text to be translated with "trans" can only contain references to simple variables'), $lineno);
         }
     }
 }
