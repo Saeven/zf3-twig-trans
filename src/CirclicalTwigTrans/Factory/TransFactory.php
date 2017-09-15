@@ -15,15 +15,15 @@ class TransFactory implements FactoryInterface
     {
         $config = $container->get('config');
 
-        foreach ($config['translator']['translation_file_patterns'] as $trcfg) {
-            if (!array_key_exists(self::DOMAIN, $trcfg)) {
-                $trcfg[self::DOMAIN] = self::DOMAIN_DEFAULT;
+        foreach ($config['translator']['translation_file_patterns'] as $translationConfig) {
+            if (!array_key_exists(self::DOMAIN, $translationConfig)) {
+                $translationConfig[self::DOMAIN] = self::DOMAIN_DEFAULT;
             }
-            bindtextdomain($trcfg[self::DOMAIN], realpath($trcfg['base_dir']) . '/');
-            bind_textdomain_codeset($trcfg[self::DOMAIN], 'UTF-8');
+            bindtextdomain($translationConfig[self::DOMAIN], realpath($translationConfig['base_dir']) . '/');
+            bind_textdomain_codeset($translationConfig[self::DOMAIN], 'UTF-8');
         }
 
-        textdomain("default");
+        textdomain('default');
 
         return new Trans(
             $container->get('ZfcTwigRenderer'),

@@ -52,7 +52,7 @@ class TransNode extends Twig_Node
 
     private $domain;
 
-    public function __construct(Twig_NodeInterface $body, $domain, Twig_NodeInterface $plural = null, Twig_Node_Expression $count = null, Twig_NodeInterface $notes = null, $line_number, $tag = null)
+    public function __construct(Twig_Node $body, $domain, Twig_NodeInterface $plural = null, Twig_Node_Expression $count = null, Twig_NodeInterface $notes = null, $line_number, $tag = null)
     {
         parent::__construct(
             array(

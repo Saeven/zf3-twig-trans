@@ -12,12 +12,6 @@ class Trans extends Extension
 {
 
     /**
-     * @var TwigRenderer
-     */
-    protected $renderer;
-
-
-    /**
      * @var Translator
      */
     protected $translator;
@@ -28,9 +22,8 @@ class Trans extends Extension
      *
      * @param TwigRenderer $renderer
      */
-    public function __construct(TwigRenderer $renderer, Translator $translator = null)
+    public function __construct(Translator $translator = null)
     {
-        $this->renderer = $renderer;
         $this->translator = $translator;
     }
 
