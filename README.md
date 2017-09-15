@@ -1,4 +1,4 @@
-# zf2-circlical-trans
+# zf3-twig-trans
 
 Magic glue to create the expected experience when developing with ZfcTwig, the MvcTranslator (e.g., from within your controllers), and your twig templates using a custom {% trans %} that this module provides.  Usage is very simple! With this package included, "trans" becomes available in your templates.
 
@@ -22,7 +22,7 @@ Inspired by ZfcTwig and its extensions project at https://github.com/twigphp/Twi
 Add this line to composer, and update:
 
 ```js
-"saeven/zf2-circlical-trans": "dev-master",
+"saeven/zf3-twig-trans": "dev-master",
 ```
 
 ### Configuration
@@ -146,6 +146,15 @@ I tried to implement all the right flavors of trans, adding direct support for d
 {% endtrans %}
 ```
 
+#### Translate with notes
+```twig
+{% trans %}
+    Hello User!
+{% notes %}
+    This is used in the greeting area.
+{% endtrans %}
+```
+
 #### Controllers
 Usage in controllers doesn't change.
 
@@ -163,7 +172,7 @@ sprintf( $tr->translatePlural( "There is one bird", "There are %d birds", 422, '
 ```
 
 
-You can test it with the ZF2 Skeleton, by translating "Home" to "fr_CA" which becomes "Acceuil" (good test).
+You can test it with the ZF3 Skeleton, by translating "Home" to "fr_CA" which becomes "Acceuil" (good test).
 
 ## Enjoy!
 
