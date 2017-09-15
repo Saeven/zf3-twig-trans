@@ -1,7 +1,10 @@
 # zf3-twig-trans
 
-[![Build Status](https://travis-ci.org/Saeven/zf3-circlical-user.svg?branch=master)](https://travis-ci.org/Saeven/zf3-circlical-user)
-
+[![Build Status](https://travis-ci.org/Saeven/zf3-twig-trans.svg?branch=master)](https://travis-ci.org/Saeven/zf3-circlical-user)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e9b80ae1c4c94159abe7bcb49b851cac)](https://www.codacy.com/app/saeven/zf3-twig-trans?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Saeven/zf3-twig-trans&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/e9b80ae1c4c94159abe7bcb49b851cac)](https://www.codacy.com/app/saeven/zf3-twig-trans?utm_source=github.com&utm_medium=referral&utm_content=Saeven/zf3-twig-trans&utm_campaign=Badge_Coverage)
+[![Latest Stable Version](https://poser.pugx.org/saeven/zf3-twig-trans/v/stable)](https://packagist.org/packages/saeven/zf3-twig-trans)
+[![Total Downloads](https://poser.pugx.org/saeven/zf3-twig-trans/downloads)](https://packagist.org/packages/saeven/zf3-twig-trans)
 
 Magic glue to create the expected experience when developing with ZfcTwig, the MvcTranslator (e.g., from within your controllers), and your twig templates using a custom {% trans %} that this module provides.  Usage is very simple! With this package included, "trans" becomes available in your templates.
 
