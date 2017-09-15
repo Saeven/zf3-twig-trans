@@ -1,33 +1,5 @@
 <?php
 
-/**
-,,
-`""*3b..
-     ""*3o.
-         "33o.			                  			S. Alexandre M. Lemaire
-           "*33o.                                   alemaire@circlical.com
-              "333o.
-                "3333bo...       ..o:
-                  "33333333booocS333    ..    ,.
-               ".    "*3333SP     V3o..o33. .333b
-                "33o. .33333o. ...A33333333333333b
-          ""bo.   "*33333333333333333333P*33333333:
-             "33.    V333333333P"**""*"'   VP  * "l
-               "333o.433333333X
-                "*3333333333333AoA3o..oooooo..           .b
-                       .X33333333333P""     ""*oo,,     ,3P
-                      33P""V3333333:    .        ""*****"
-                    .*"    A33333333o.4;      .
-                         .oP""   "333333b.  .3;
-                                  A3333333333P
-                                  "  "33333P"
-                                      33P*"
-		                              .3"
-                                     "
-
-
-*/
-
 namespace CirclicalTwigTrans\Model\Twig;
 
 use CirclicalTwigTrans\Model\Twig\Parser\TransParser;
@@ -55,13 +27,13 @@ class TransNode extends Twig_Node
     public function __construct(Twig_Node $body, $domain, Twig_NodeInterface $plural = null, Twig_Node_Expression $count = null, Twig_NodeInterface $notes = null, $line_number, $tag = null)
     {
         parent::__construct(
-            array(
+            [
                 'count' => $count,
                 'body' => $body,
                 'plural' => $plural,
                 'notes' => $notes,
-            ),
-            array(),
+            ],
+            [],
             $line_number,
             $tag
         );
@@ -76,7 +48,7 @@ class TransNode extends Twig_Node
      */
     public function getTokenParsers()
     {
-        return array(new TransParser());
+        return [new TransParser()];
     }
 
 
@@ -116,7 +88,7 @@ class TransNode extends Twig_Node
             $message = trim($notes->getAttribute(self::TYPE_DATA));
 
             // line breaks are not allowed cause we want a single line comment
-            $message = str_replace(array("\n", "\r"), " ", $message);
+            $message = str_replace(["\n", "\r"], " ", $message);
             $compiler->write("// notes: {$message}\n");
         }
 
@@ -183,6 +155,7 @@ class TransNode extends Twig_Node
 
     /**
      * @param Twig_NodeInterface $body A Twig_NodeInterface instance
+     *
      * @return array
      * @throws BlankTranslationException
      */
@@ -190,15 +163,16 @@ class TransNode extends Twig_Node
     {
 
         if ($body instanceof Twig_Node_Expression_Name || $body instanceof Twig_Node_Expression_Constant || $body instanceof Twig_Node_Expression_TempName) {
-            if( $body instanceof Twig_Node_Expression_Constant ){
-                if( !trim($body->getAttribute('value')) ){
+            if ($body instanceof Twig_Node_Expression_Constant) {
+                if (!trim($body->getAttribute('value'))) {
                     throw new BlankTranslationException("You are attempting to translate an empty string", $body->getLine());
                 }
             }
-            return array($body, array());
+
+            return [$body, []];
         }
 
-        $vars = array();
+        $vars = [];
         if (count($body)) {
             $msg = '';
 
@@ -230,7 +204,7 @@ class TransNode extends Twig_Node
             throw new BlankTranslationException("You are attempting to translate a blank string", $body->getLine());
         }
 
-        return array(new Twig_Node(array(new Twig_Node_Expression_Constant(trim($msg), $body->getLine()))), $vars);
+        return [new Twig_Node([new Twig_Node_Expression_Constant(trim($msg), $body->getLine())]), $vars];
     }
 
 }
