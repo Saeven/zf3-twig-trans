@@ -22,8 +22,9 @@ class Trans extends Extension
      *
      * @param TwigRenderer $renderer
      */
-    public function __construct(Translator $translator = null)
+    public function __construct(TwigRenderer $renderer, Translator $translator = null)
     {
+        parent::__construct($renderer);
         $this->translator = $translator;
     }
 

@@ -2,6 +2,7 @@
 
 namespace CirclicalTwigTrans\Test;
 
+use CirclicalTwigTrans\Model\Twig\Trans;
 use Twig_Environment;
 use Twig_Loader_Chain;
 use Zend\View\View;
@@ -27,7 +28,7 @@ class ExtensionTest extends TestCase
 
         $renderer = new TwigRenderer(new View, $chain, $environment, new TwigResolver($environment));
         $environment->addExtension(new \Twig_Extensions_Extension_I18n());
-        $environment->addExtension(new \CirclicalTwigTrans\Model\Twig\Trans($translatorInstance));
+        $environment->addExtension(new Trans($renderer, $translatorInstance));
 
         return $renderer;
     }
@@ -97,7 +98,8 @@ class ExtensionTest extends TestCase
 
     public function testCanDecideForEnd()
     {
-        $trans = new \CirclicalTwigTrans\Model\Twig\Trans();
+
+        $trans = new Trans($this->getRenderer());
         $token = new \Twig_Token(\Twig_Token::NAME_TYPE, 'endtrans', 0);
         $result = $trans->decideForEnd($token);
         $this->assertTrue($result);
@@ -105,7 +107,7 @@ class ExtensionTest extends TestCase
 
     public function testCanDecideForFork()
     {
-        $trans = new \CirclicalTwigTrans\Model\Twig\Trans();
+        $trans = new Trans($this->getRenderer());
         $token = new \Twig_Token(\Twig_Token::NAME_TYPE, 'plural', 0);
         $result = $trans->decideForFork($token);
         $this->assertTrue($result);
