@@ -1,5 +1,8 @@
 # zf3-twig-trans
 
+[![Build Status](https://travis-ci.org/Saeven/zf3-circlical-user.svg?branch=master)](https://travis-ci.org/Saeven/zf3-circlical-user)
+
+
 Magic glue to create the expected experience when developing with ZfcTwig, the MvcTranslator (e.g., from within your controllers), and your twig templates using a custom {% trans %} that this module provides.  Usage is very simple! With this package included, "trans" becomes available in your templates.
 
 > New! This module supports text domains!

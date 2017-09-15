@@ -15,4 +15,4 @@ script:
   - vendor/bin/phpunit
 
 after_script:
-  - vendor/bin/codacycoverage clover build/coverage.xml
+  - vendor/bin/codacycoverage clover tests/_reports/logs/clover.xml
