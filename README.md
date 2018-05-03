@@ -13,28 +13,26 @@ Magic glue to create the expected experience when developing with ZfcTwig, the M
 Inspired by ZfcTwig and its extensions project at https://github.com/twigphp/Twig-extensions
 
 
-### Requirements
+## Requirements
 
 
 |Item               |  Version     |
 |-------------------|--------------|
-|PHP                | 5.5+         |
-|Zend Framework     | 2.3.*        |
+|PHP                | 7+           |
+|Zend Framework     | 3.*          |
 |Gettext PHP Module | *            | 
 
 
-### Installation
-
-Add this line to composer, and update:
+## Installation
 
 ```js
-"saeven/zf3-twig-trans": "dev-master",
+composer require "saeven/zf3-twig-trans"
 ```
 
-### Configuration
+## Configuration
 
 
-#### application.config.php
+#### Loading the module: application.config.php
 
 In your module's application.config.php, make sure you've got these modules loaded:
 
@@ -43,7 +41,7 @@ In your module's application.config.php, make sure you've got these modules load
 
 By loading CirclicalTwigTrans, you will be setting an alias from 'translator' to 'MvcTranslator'.  If you have an existing translator alias in your system, please remove it.
 
-#### Your Application's Module.php
+#### Managing Locale: Your Application's Module.php
 
 It's assumed that you are managing locale in your app's bootstrap.  For example, in your Application module's onBootstrap:
 
@@ -60,9 +58,8 @@ public function onBootstrap(MvcEvent $e)
 
 #### Proper Language File Setup
 
-Traditional gettext imposes a certain file structure.  Yea, yea, messing with your app is a PITA, but it's a small price to pay when the performance benefits of true gettext are considered. This also enables domain support.  You want this.
+gettext imposes a certain file structure; language folders for a module would look like so:
 
-My language setup in my Application Module looks like so:
 ```
 module/
     Application/
@@ -81,38 +78,40 @@ module/
                     errors.po
 ```
 
-The default.mo indicates that that file, contains text strings for the 'default' text domain.  
+The .mo files are truly the ones that matter.  The .po files, are the source files that are used to compile the .mo files with msgfmt.
 
-You need to tweak your translator configuration to support this file structure, it's very simple:
+The nomenclature, default.mo, indicates that that file contains text strings for the 'default' text domain.  In other words, the name of the files is vital to proper functionality.  
+
+You need to tweak your translator configuration to support this file structure, it's very simple.  Per module:
 
 ```php
-'translator' => array(
-        'locale' => 'en_US',
-        'translation_file_patterns' => array(
-            array(
-                'type'          => 'gettext',
-                'base_dir'      => __DIR__ . '/../language',
-                'pattern'       => '%s/LC_MESSAGES/default.mo',
-                'text_domain'   => 'default',
-            ),
-            array(
-                'type'          => 'gettext',
-                'base_dir'      => __DIR__ . '/../language',
-                'pattern'       => '%s/LC_MESSAGES/errors.mo',
-                'text_domain'   => 'errors',
-            ),
-        ),
-    ),
+'translator' => [
+    'locale' => 'en_US',
+    'translation_file_patterns' => [
+        [
+            'type'          => 'gettext',
+            'base_dir'      => __DIR__ . '/../language',
+            'pattern'       => '%s/LC_MESSAGES/default.mo',
+            'text_domain'   => 'default',
+        ],
+        [
+            'type'          => 'gettext',
+            'base_dir'      => __DIR__ . '/../language',
+            'pattern'       => '%s/LC_MESSAGES/errors.mo',
+            'text_domain'   => 'errors',
+        ],
+    ],
+],
 ```
 
-*The MvcTranslator will behave properly, it does support domains*
+Very important: there's a critical difference between Zend's translator implementations, and gettext's implementation.  The Zend translator
+will allow you to use multiple .mo files for a same domain, but gettext does not support this behavior.  To ensure that both the Twig translations, and
+your in-app translations (e.g., `$translator->translate('foo')`) work properly, your domain names must be unique.  A good practice is to name your domain, 
+after your module.
 
-> A common gotcha here, is that your text domain MUST match the name of your .mo file
+## Usage
 
-
-### Usage
-
-I tried to implement all the right flavors of trans, adding direct support for domain overrides from within the template.  These syntax structures all work:
+Included tests support all flavors of trans, adding direct support for domain overrides from within the template.  These syntax structures all work:
 
 
 #### Translate 'Sorry' from text-domain 'errors'
