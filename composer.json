@@ -21,7 +21,7 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "php": ">=7.0",
+    "php": ">=7.1",
     "kokspflanze/zfc-twig": "@stable",
     "twig/twig": "^1",
     "twig/extensions": "@stable",
