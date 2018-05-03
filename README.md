@@ -85,15 +85,17 @@ You need to tweak your translator configuration to support this file structure, 
 
 ```php
 'translator' => [
-    'locale' => 'en_US',
+    
     'translation_file_patterns' => [
         [
+            'locale'        => 'en_US',
             'type'          => 'gettext',
             'base_dir'      => __DIR__ . '/../language',
             'pattern'       => '%s/LC_MESSAGES/default.mo',
             'text_domain'   => 'default',
         ],
         [
+            'locale'        => 'en_US',
             'type'          => 'gettext',
             'base_dir'      => __DIR__ . '/../language',
             'pattern'       => '%s/LC_MESSAGES/errors.mo',

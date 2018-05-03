@@ -1,7 +1,9 @@
 <?php
 
+use CirclicalTwigTrans\Factory\TransDefaultDomainFactory;
 use CirclicalTwigTrans\Model\Twig\Trans;
 use CirclicalTwigTrans\Factory\TransFactory;
+use CirclicalTwigTrans\Model\Twig\TransDefaultDomain;
 
 return [
 
@@ -11,6 +13,7 @@ return [
         ],
         'factories' => [
             Trans::class => TransFactory::class,
+            TransDefaultDomain::class => TransDefaultDomainFactory::class,
         ],
     ],
 
