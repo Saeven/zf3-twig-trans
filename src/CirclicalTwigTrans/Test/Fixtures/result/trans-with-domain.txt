@@ -1,1 +1,1 @@
-This was translated from a domain.
+The answer is 42

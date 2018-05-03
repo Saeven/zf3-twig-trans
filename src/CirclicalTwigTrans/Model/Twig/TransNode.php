@@ -17,10 +17,10 @@ use CirclicalTwigTrans\Exception\BlankTranslationException;
 
 class TransNode extends Twig_Node
 {
-    const TYPE_PLURAL = 'plural';
-    const TYPE_COUNT = 'count';
-    const TYPE_NAME = 'name';
-    const TYPE_DATA = 'data';
+    private const TYPE_PLURAL = 'plural';
+    private const TYPE_COUNT = 'count';
+    private const TYPE_NAME = 'name';
+    private const TYPE_DATA = 'data';
 
     private $domain;
 
@@ -66,10 +66,10 @@ class TransNode extends Twig_Node
          * @var TWig_Node $msg1
          */
         try {
-            list($msg, $vars) = $this->compileString($this->getNode('body'));
+            [$msg, $vars] = $this->compileString($this->getNode('body'));
 
             if (null !== $this->getNode(self::TYPE_PLURAL)) {
-                list($msg1, $vars1) = $this->compileString($this->getNode(self::TYPE_PLURAL));
+                [$msg1, $vars1] = $this->compileString($this->getNode(self::TYPE_PLURAL));
                 $vars = array_merge($vars, $vars1);
             }
         } catch (BlankTranslationException $x) {
@@ -77,11 +77,12 @@ class TransNode extends Twig_Node
         }
 
 
-        $is_plural = null === $this->getNode(self::TYPE_PLURAL) ? false : true;
-        if (!$this->domain)
-            $function = $is_plural ? 'ngettext' : 'gettext';
-        else
-            $function = $is_plural ? 'dngettext' : 'dgettext';
+        $isPlural = null !== $this->getNode(self::TYPE_PLURAL);
+        if (!$this->domain) {
+            $function = $isPlural ? 'ngettext' : 'gettext';
+        } else {
+            $function = $isPlural ? 'dngettext' : 'dgettext';
+        }
 
         // handle notes
         if (null !== $notes = $this->getNode('notes')) {
@@ -163,21 +164,19 @@ class TransNode extends Twig_Node
     {
 
         if ($body instanceof Twig_Node_Expression_Name || $body instanceof Twig_Node_Expression_Constant || $body instanceof Twig_Node_Expression_TempName) {
-            if ($body instanceof Twig_Node_Expression_Constant) {
-                if (!trim($body->getAttribute('value'))) {
-                    throw new BlankTranslationException("You are attempting to translate an empty string", $body->getLine());
-                }
+            if ($body instanceof Twig_Node_Expression_Constant && !trim($body->getAttribute('value'))) {
+                throw new BlankTranslationException('You are attempting to translate an empty string', $body->getLine());
             }
 
             return [$body, []];
         }
 
         $vars = [];
-        if (count($body)) {
+        if (\count($body)) {
             $msg = '';
 
             foreach ($body as $node) {
-                if (get_class($node) === 'Twig_Node' && $node->getNode(0) instanceof Twig_Node_SetTemp) {
+                if (\get_class($node) === 'Twig_Node' && $node->getNode(0) instanceof Twig_Node_SetTemp) {
                     $node = $node->getNode(1);
                 }
 

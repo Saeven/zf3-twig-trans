@@ -31,7 +31,7 @@
     "zendframework/zend-view": "@stable"
   },
   "require-dev": {
-    "phpunit/phpunit": "@stable",
+    "phpunit/phpunit": "^6@stable",
     "codacy/coverage": "^1.0"
   },
   "autoload": {

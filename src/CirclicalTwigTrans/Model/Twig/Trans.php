@@ -11,40 +11,23 @@ use Twig_Token;
 class Trans extends Extension
 {
 
-    /**
-     * @var Translator
-     */
     protected $translator;
 
-
-    /**
-     * Constructor.
-     *
-     * @param TwigRenderer $renderer
-     */
-    public function __construct(TwigRenderer $renderer, Translator $translator = null)
+    public function __construct(TwigRenderer $renderer, Translator $translator)
     {
         parent::__construct($renderer);
         $this->translator = $translator;
     }
 
-
-    /**
-     * Returns the token parser instances to add to the existing list.
-     *
-     * @return array An array of Twig_TokenParserInterface or Twig_TokenParserBrokerInterface instances
-     */
     public function getTokenParsers()
     {
-        // best place to set locale I could find, because of how the module loader works
-        // translator is optional to facilitate extraction, use Factory to create in production
         if ($this->translator) {
             $locale = $this->translator->getLocale();
             putenv('LANG=' . $locale);
-            setlocale(LC_MESSAGES, $locale . ".utf-8");
+            setlocale(LC_MESSAGES, $locale . '.utf-8');
         }
 
-        return [new TransParser($this->translator)];
+        return [new TransParser()];
     }
 
     public function decideForFork(Twig_Token $token)
@@ -57,11 +40,6 @@ class Trans extends Extension
         return $token->test('endtrans');
     }
 
-    /**
-     * Returns the name of the extension.
-     *
-     * @return string The extension name
-     */
     public function getName()
     {
         return 'circlical-translator';

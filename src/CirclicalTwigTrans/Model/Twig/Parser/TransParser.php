@@ -13,15 +13,11 @@ use Twig_Node_Expression_Name;
 class TransParser extends \Twig_Extensions_TokenParser_Trans
 {
 
-    const DECIDE_FORK = 'decideForFork';
-    const DECIDE_END = 'decideForEnd';
+    private const DECIDE_FORK = 'decideForFork';
+    private const DECIDE_END = 'decideForEnd';
 
     /**
      * Parses a token and returns a node.
-     *
-     * @param Twig_Token $token A Twig_Token instance
-     *
-     * @return Twig_NodeInterface A Twig_NodeInterface instance
      */
     public function parse(Twig_Token $token)
     {
@@ -30,20 +26,20 @@ class TransParser extends \Twig_Extensions_TokenParser_Trans
         $count = null;
         $plural = null;
         $notes = null;
-        $text_domain = null;
-        $initial_block = false;
+        $textDomain = null;
+        $initialBlock = false;
 
 
         if (!$stream->test(Twig_Token::BLOCK_END_TYPE)) {
             if ($stream->nextIf(Twig_Token::NAME_TYPE, 'from')) {
-                $text_domain = $stream->expect(Twig_Token::STRING_TYPE)->getValue();
+                $textDomain = $stream->expect(Twig_Token::STRING_TYPE)->getValue();
             } else {
                 $body = $this->parser->getExpressionParser()->parseExpression();
-                $initial_block = true;
+                $initialBlock = true;
             }
         }
 
-        if (!$initial_block && $stream->test(Twig_Token::BLOCK_END_TYPE)) {
+        if (!$initialBlock && $stream->test(Twig_Token::BLOCK_END_TYPE)) {
             $stream->expect(Twig_Token::BLOCK_END_TYPE);
             $body = $this->parser->subparse([$this, self::DECIDE_FORK]);
             $next = $stream->next()->getValue();
@@ -63,14 +59,14 @@ class TransParser extends \Twig_Extensions_TokenParser_Trans
             }
         }
 
-        if (!$text_domain) {
+        if (!$textDomain) {
             $stream->expect(Twig_Token::BLOCK_END_TYPE);
             $this->checkTransString($body, $lineno);
         } else {
             $stream->expect(Twig_Token::BLOCK_END_TYPE);
         }
 
-        return new TransNode($body, $text_domain, $plural, $count, $notes, $lineno, $this->getTag());
+        return new TransNode($body, $textDomain, $plural, $count, $notes, $lineno, $this->getTag());
     }
 
     public function decideForFork(Twig_Token $token)
