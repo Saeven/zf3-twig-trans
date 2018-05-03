@@ -21,6 +21,7 @@ return [
     'zfctwig' => [
         'extensions' => [
             Trans::class,
+            TransDefaultDomain::class,
         ],
     ],
 ];
