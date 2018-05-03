@@ -21,11 +21,9 @@ class Trans extends Extension
 
     public function getTokenParsers()
     {
-        if ($this->translator) {
-            $locale = $this->translator->getLocale();
-            putenv('LANG=' . $locale);
-            setlocale(LC_MESSAGES, $locale . '.utf-8');
-        }
+        $locale = $this->translator->getLocale();
+        putenv('LANG=' . $locale);
+        setlocale(LC_MESSAGES, $locale . '.utf-8');
 
         return [new TransParser()];
     }
@@ -45,5 +43,3 @@ class Trans extends Extension
         return 'circlical-translator';
     }
 }
-
- 

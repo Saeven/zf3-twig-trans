@@ -24,6 +24,8 @@ class TransNode extends Twig_Node
 
     private $domain;
 
+    private $defaultDomain;
+
     public function __construct(Twig_Node $body, $domain, Twig_NodeInterface $plural = null, Twig_Node_Expression $count = null, Twig_NodeInterface $notes = null, $line_number, $tag = null)
     {
         parent::__construct(
@@ -39,6 +41,11 @@ class TransNode extends Twig_Node
         );
 
         $this->domain = $domain;
+    }
+
+    public function setDefaultDomain(?string $defaultDomain)
+    {
+        $this->defaultDomain = $defaultDomain;
     }
 
     /**
@@ -78,10 +85,21 @@ class TransNode extends Twig_Node
 
 
         $isPlural = null !== $this->getNode(self::TYPE_PLURAL);
-        if (!$this->domain) {
-            $function = $isPlural ? 'ngettext' : 'gettext';
-        } else {
+        $translationDomain = null;
+
+        if ($this->defaultDomain) {
+            $translationDomain = $this->defaultDomain;
+        }
+
+        if ($this->domain) {
+            $translationDomain = $this->domain;
+        }
+
+        if ($translationDomain) {
             $function = $isPlural ? 'dngettext' : 'dgettext';
+        } else {
+            $function = $isPlural ? 'ngettext' : 'gettext';
+
         }
 
         // handle notes
@@ -96,8 +114,8 @@ class TransNode extends Twig_Node
         if ($vars) {
             $compiler->write('echo strtr(' . $function . '(');
 
-            if ($this->domain) {
-                $compiler->repr($this->domain);
+            if ($translationDomain) {
+                $compiler->repr($translationDomain);
                 $compiler->raw(', ');
             }
 
@@ -134,8 +152,8 @@ class TransNode extends Twig_Node
 
         } else {
             $compiler->write('echo ' . $function . '(');
-            if ($this->domain) {
-                $compiler->repr($this->domain);
+            if ($translationDomain) {
+                $compiler->repr($translationDomain);
                 $compiler->raw(', ');
             }
 

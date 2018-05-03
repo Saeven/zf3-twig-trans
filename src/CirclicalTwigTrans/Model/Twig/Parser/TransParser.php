@@ -21,7 +21,7 @@ class TransParser extends \Twig_Extensions_TokenParser_Trans
      */
     public function parse(Twig_Token $token)
     {
-        $lineno = $token->getLine();
+        $lineNumber = $token->getLine();
         $stream = $this->parser->getStream();
         $count = null;
         $plural = null;
@@ -61,12 +61,12 @@ class TransParser extends \Twig_Extensions_TokenParser_Trans
 
         if (!$textDomain) {
             $stream->expect(Twig_Token::BLOCK_END_TYPE);
-            $this->checkTransString($body, $lineno);
+            $this->checkTransString($body, $lineNumber);
         } else {
             $stream->expect(Twig_Token::BLOCK_END_TYPE);
         }
 
-        return new TransNode($body, $textDomain, $plural, $count, $notes, $lineno, $this->getTag());
+        return new TransNode($body, $textDomain, $plural, $count, $notes, $lineNumber, $this->getTag());
     }
 
     public function decideForFork(Twig_Token $token)

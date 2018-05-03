@@ -3,6 +3,7 @@
 namespace CirclicalTwigTrans\Test;
 
 use CirclicalTwigTrans\Model\Twig\Trans;
+use CirclicalTwigTrans\Model\Twig\TransDefaultDomain;
 use Twig_Environment;
 use Twig_Loader_Chain;
 use Zend\Mvc\I18n\Translator;
@@ -30,6 +31,7 @@ class ExtensionTest extends TestCase
         $renderer = new TwigRenderer(new View, $chain, $environment, new TwigResolver($environment));
         $environment->addExtension(new \Twig_Extensions_Extension_I18n());
         $environment->addExtension(new Trans($renderer, $this->getTranslator()));
+        $environment->addExtension(new TransDefaultDomain($renderer));
 
         return $renderer;
     }
@@ -125,5 +127,19 @@ class ExtensionTest extends TestCase
         $token = new \Twig_Token(\Twig_Token::NAME_TYPE, 'plural', 0);
         $result = $trans->decideForFork($token);
         $this->assertTrue($result);
+    }
+
+    public function testSimpleTransWithDefaultDomain()
+    {
+        $content = $this->getRenderer()->render('/simpletrans-defaultdomain.twig');
+        $this->assertInternalType('string', $content);
+        $this->assertStringEqualsFile(__DIR__ . '/Fixtures/result/trans-with-domain.txt', $content);
+    }
+
+    public function testIncludeTransWithDefaultDomain()
+    {
+        $content = $this->getRenderer()->render('/trans-with-include.twig');
+        $this->assertInternalType('string', $content);
+        $this->assertStringEqualsFile(__DIR__ . '/Fixtures/result/trans-with-include.txt', $content);
     }
 }
