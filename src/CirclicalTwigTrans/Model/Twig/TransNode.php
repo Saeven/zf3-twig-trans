@@ -3,19 +3,17 @@
 namespace CirclicalTwigTrans\Model\Twig;
 
 use CirclicalTwigTrans\Model\Twig\Parser\TransParser;
-use Twig_Node_Expression_Constant;
-use Twig_Node_Expression_Filter;
-use Twig_Node_Expression_Name;
-use Twig_Node_Expression_TempName;
-use Twig_Node_Print;
-use Twig_Node_SetTemp;
-use Twig_Compiler;
-use Twig_Node;
-use Twig_NodeInterface;
-use Twig_Node_Expression;
+use Twig\Compiler;
+use Twig\Node\Expression\AbstractExpression;
+use Twig\Node\Expression\ConstantExpression;
+use Twig\Node\Expression\FilterExpression;
+use Twig\Node\Expression\NameExpression;
+use Twig\Node\Expression\TempNameExpression;
+use Twig\Node\Node;
 use CirclicalTwigTrans\Exception\BlankTranslationException;
+use Twig\Node\PrintNode;
 
-class TransNode extends Twig_Node
+class TransNode extends Node
 {
     private const TYPE_PLURAL = 'plural';
     private const TYPE_COUNT = 'count';
@@ -26,15 +24,26 @@ class TransNode extends Twig_Node
 
     private $defaultDomain;
 
-    public function __construct(Twig_Node $body, $domain, Twig_NodeInterface $plural = null, Twig_Node_Expression $count = null, Twig_NodeInterface $notes = null, $line_number, $tag = null)
+    public function __construct(Node $body, $domain, ?Node $plural = null, ?AbstractExpression $count = null, ?Node $notes = null, $line_number, $tag = null)
     {
+        $nodes = [
+            'body' => $body,
+        ];
+
+        if ($plural) {
+            $nodes['plural'] = $plural;
+        }
+
+        if ($count) {
+            $nodes['count'] = $count;
+        }
+
+        if ($notes) {
+            $nodes['notes'] = $notes;
+        }
+
         parent::__construct(
-            [
-                'count' => $count,
-                'body' => $body,
-                'plural' => $plural,
-                'notes' => $notes,
-            ],
+            $nodes,
             [],
             $line_number,
             $tag
@@ -50,8 +59,6 @@ class TransNode extends Twig_Node
 
     /**
      * Returns the token parser instances to add to the existing list.
-     *
-     * @return array An array of Twig_TokenParserInterface or Twig_TokenParserBrokerInterface instances
      */
     public function getTokenParsers()
     {
@@ -61,21 +68,19 @@ class TransNode extends Twig_Node
 
     /**
      * Compiles the node to PHP.
-     *
-     * @param Twig_Compiler $compiler A Twig_Compiler instance
      */
-    public function compile(Twig_Compiler $compiler)
+    public function compile(Compiler $compiler)
     {
         $compiler->addDebugInfo($this);
 
         /**
-         * @var Twig_Node $msg
-         * @var TWig_Node $msg1
+         * @var Node $msg
+         * @var Node $msg1
          */
         try {
             [$msg, $vars] = $this->compileString($this->getNode('body'));
 
-            if (null !== $this->getNode(self::TYPE_PLURAL)) {
+            if ($this->hasNode(self::TYPE_PLURAL)) {
                 [$msg1, $vars1] = $this->compileString($this->getNode(self::TYPE_PLURAL));
                 $vars = array_merge($vars, $vars1);
             }
@@ -84,7 +89,7 @@ class TransNode extends Twig_Node
         }
 
 
-        $isPlural = null !== $this->getNode(self::TYPE_PLURAL);
+        $isPlural = $this->hasNode(self::TYPE_PLURAL);
         $translationDomain = null;
 
         if ($this->defaultDomain) {
@@ -103,7 +108,8 @@ class TransNode extends Twig_Node
         }
 
         // handle notes
-        if (null !== $notes = $this->getNode('notes')) {
+        if ($this->hasNode('notes')) {
+            $notes = $this->getNode('notes');
             $message = trim($notes->getAttribute(self::TYPE_DATA));
 
             // line breaks are not allowed cause we want a single line comment
@@ -121,7 +127,7 @@ class TransNode extends Twig_Node
 
             $compiler->subcompile($msg);
 
-            if (null !== $this->getNode(self::TYPE_PLURAL)) {
+            if ($this->hasNode(self::TYPE_PLURAL)) {
                 $compiler
                     ->raw(', ')
                     ->subcompile($msg1)
@@ -159,7 +165,7 @@ class TransNode extends Twig_Node
 
             $compiler->subcompile($msg);
 
-            if (null !== $this->getNode(self::TYPE_PLURAL)) {
+            if ($this->hasNode(self::TYPE_PLURAL)) {
                 $compiler
                     ->raw(', ')
                     ->subcompile($msg1)
@@ -173,16 +179,14 @@ class TransNode extends Twig_Node
     }
 
     /**
-     * @param Twig_NodeInterface $body A Twig_NodeInterface instance
-     *
      * @return array
      * @throws BlankTranslationException
      */
-    protected function compileString(Twig_NodeInterface $body)
+    protected function compileString(Node $body)
     {
 
-        if ($body instanceof Twig_Node_Expression_Name || $body instanceof Twig_Node_Expression_Constant || $body instanceof Twig_Node_Expression_TempName) {
-            if ($body instanceof Twig_Node_Expression_Constant && !trim($body->getAttribute('value'))) {
+        if ($body instanceof NameExpression || $body instanceof ConstantExpression || $body instanceof TempNameExpression) {
+            if ($body instanceof ConstantExpression && !trim($body->getAttribute('value'))) {
                 throw new BlankTranslationException('You are attempting to translate an empty string', $body->getLine());
             }
 
@@ -194,34 +198,33 @@ class TransNode extends Twig_Node
             $msg = '';
 
             foreach ($body as $node) {
-                if (\get_class($node) === 'Twig_Node' && $node->getNode(0) instanceof Twig_Node_SetTemp) {
+                if (\get_class($node) === Node::class && $node->getNode(0) instanceof \Twig\Node\SetNode) {
                     $node = $node->getNode(1);
                 }
 
-                if ($node instanceof Twig_Node_Print) {
+                if ($node instanceof PrintNode) {
                     $n = $node->getNode('expr');
-                    while ($n instanceof Twig_Node_Expression_Filter) {
+                    while ($n instanceof FilterExpression) {
                         $n = $n->getNode('node');
                     }
                     $msg .= sprintf('%%%s%%', $n->getAttribute(self::TYPE_NAME));
-                    $vars[] = new Twig_Node_Expression_Name($n->getAttribute(self::TYPE_NAME), $n->getLine());
+                    $vars[] = new NameExpression($n->getAttribute(self::TYPE_NAME), $n->getTemplateLine());
                 } else {
                     $msg .= $node->getAttribute(self::TYPE_DATA);
                 }
             }
         } else {
-            /** @var Twig_Node $body */
             if (!$body->hasAttribute(self::TYPE_DATA)) {
-                throw new BlankTranslationException("You are attempting to translate a empty string", $body->getLine());
+                throw new BlankTranslationException('You are attempting to translate a empty string', $body->getTemplateLine());
             }
             $msg = $body->getAttribute(self::TYPE_DATA);
         }
 
         if (!trim($msg)) {
-            throw new BlankTranslationException("You are attempting to translate a blank string", $body->getLine());
+            throw new BlankTranslationException('You are attempting to translate a blank string', $body->getLine());
         }
 
-        return [new Twig_Node([new Twig_Node_Expression_Constant(trim($msg), $body->getLine())]), $vars];
+        return [new Node([new ConstantExpression(trim($msg), $body->getTemplateLine())]), $vars];
     }
 
 }

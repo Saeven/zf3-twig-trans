@@ -2,12 +2,13 @@
 
 namespace CirclicalTwigTrans\Model\Twig;
 
-use Twig_Compiler;
-use TWig_Node;
+use Twig\Compiler;
+use Twig\Node\Expression\AbstractExpression;
+use Twig\Node\Node;
 
-class TransDefaultDomainNode extends Twig_Node
+class TransDefaultDomainNode extends Node
 {
-    public function __construct(\Twig_Node_Expression $expr, int $lineno = 0, string $tag = null)
+    public function __construct(AbstractExpression $expr, int $lineno = 0, string $tag = null)
     {
         parent::__construct(['expr' => $expr], [], $lineno, $tag);
     }
@@ -17,7 +18,7 @@ class TransDefaultDomainNode extends Twig_Node
         return $this->getNode('expr')->getAttribute('value');
     }
 
-    public function compile(Twig_Compiler $compiler)
+    public function compile(Compiler $compiler)
     {
         // we are relying on the visitor
     }

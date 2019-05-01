@@ -3,7 +3,9 @@
 
 namespace CirclicalTwigTrans\Model\Twig;
 
-use Twig_Environment;
+use Twig\Environment;
+use Twig\Node\ModuleNode;
+use Twig\Node\Node;
 use Twig_NodeInterface;
 
 class TranslationDefaultDomainNodeVisitor implements \Twig_NodeVisitorInterface
@@ -13,10 +15,8 @@ class TranslationDefaultDomainNodeVisitor implements \Twig_NodeVisitorInterface
 
     /**
      * Called before child nodes are visited.
-     *
-     * @return Twig_NodeInterface The modified node
      */
-    public function enterNode(Twig_NodeInterface $node, Twig_Environment $env)
+    public function enterNode(Node $node, Environment $env): Node
     {
         if ($domain = $this->getDefaultDomain($node)) {
             $this->defaultDomain = $domain;
@@ -29,7 +29,7 @@ class TranslationDefaultDomainNodeVisitor implements \Twig_NodeVisitorInterface
         return $node;
     }
 
-    private function getDefaultDomain(\Twig_NodeInterface $node)
+    private function getDefaultDomain(Node $node)
     {
         if ($node instanceof TransDefaultDomainNode) {
             return $node->getDomain();
@@ -41,12 +41,10 @@ class TranslationDefaultDomainNodeVisitor implements \Twig_NodeVisitorInterface
 
     /**
      * Called after child nodes are visited.
-     *
-     * @return Twig_NodeInterface|false The modified node or false if the node must be removed
      */
-    public function leaveNode(Twig_NodeInterface $node, Twig_Environment $env)
+    public function leaveNode(Node $node, Environment $env)
     {
-        if ($node instanceof \Twig_Node_Module) {
+        if ($node instanceof ModuleNode) {
             $this->defaultDomain = null;
         }
 

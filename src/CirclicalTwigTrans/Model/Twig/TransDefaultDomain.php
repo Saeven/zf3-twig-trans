@@ -18,7 +18,9 @@ class TransDefaultDomain extends Extension
 
     public function getTokenParsers()
     {
-        return [new TransDefaultDomainTokenParser()];
+        return [
+            new TransDefaultDomainTokenParser(),
+        ];
     }
 
     public function getNodeVisitors()

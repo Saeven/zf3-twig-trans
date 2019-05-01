@@ -23,12 +23,13 @@
   "require": {
     "php": ">=7.1",
     "kokspflanze/zfc-twig": "@stable",
-    "twig/twig": "^1",
+    "twig/twig": "^2.8.1",
     "twig/extensions": "@stable",
     "zendframework/zend-servicemanager": "@stable",
     "zendframework/zend-mvc-i18n": "@stable",
     "zendframework/zend-mvc": "@stable",
-    "zendframework/zend-view": "@stable"
+    "zendframework/zend-view": "@stable",
+    "ext-gettext": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^6@stable",

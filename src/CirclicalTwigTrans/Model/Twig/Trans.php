@@ -3,10 +3,10 @@
 namespace CirclicalTwigTrans\Model\Twig;
 
 use CirclicalTwigTrans\Model\Twig\Parser\TransParser;
+use Twig\Token;
 use Zend\Mvc\I18n\Translator;
 use ZfcTwig\Twig\Extension;
 use ZfcTwig\View\TwigRenderer;
-use Twig_Token;
 
 class Trans extends Extension
 {
@@ -28,12 +28,12 @@ class Trans extends Extension
         return [new TransParser()];
     }
 
-    public function decideForFork(Twig_Token $token)
+    public function decideForFork(Token $token)
     {
         return $token->test(['plural', 'from', 'notes', 'endtrans']);
     }
 
-    public function decideForEnd(Twig_Token $token)
+    public function decideForEnd(Token $token)
     {
         return $token->test('endtrans');
     }
