@@ -30,7 +30,7 @@ class TransDefaultDomain extends Extension
         ];
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'circlical-translatordomain';
     }

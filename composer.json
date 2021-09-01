@@ -1,43 +1,44 @@
 {
-  "name": "saeven/zf3-twig-trans",
-  "description": "ZF3 module that glues Twig's {% trans %} and the standard translator together",
-  "type": "library",
-  "license": "MIT",
-  "homepage": "https://github.com/Saeven/zf3-twig-trans",
-  "keywords": [
-    "zf2",
-    "twig",
-    "trans",
-    "translator",
-    "i18n"
-  ],
-  "authors": [
-    {
-      "name": "Alexandre Lemaire",
-      "email": "alemaire@circlical.com",
-      "homepage": "http://circlical.com/",
-      "role": "Developer"
+    "name": "saeven/zf3-twig-trans",
+    "description": "ZF3 module that glues Twig's {% trans %} and the standard translator together",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://github.com/Saeven/zf3-twig-trans",
+    "keywords": [
+        "zf2",
+        "twig",
+        "trans",
+        "translator",
+        "i18n"
+    ],
+    "authors": [
+        {
+            "name": "Alexandre Lemaire",
+            "email": "alemaire@circlical.com",
+            "homepage": "http://circlical.com/",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.4",
+        "ext-gettext": "*",
+        "kokspflanze/zfc-twig": "^4.0.0",
+        "twig/twig": "^3.0.1",
+        "symfony/twig-bridge": "@stable",
+        "laminas/laminas-servicemanager": "@stable",
+        "laminas/laminas-mvc-i18n": "@stable",
+        "laminas/laminas-mvc": "@stable",
+        "laminas/laminas-view": "@stable",
+        "laminas/laminas-dependency-plugin": "^2.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6@stable",
+        "codacy/coverage": "^1.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "CirclicalTwigTrans\\": "src/"
+        }
     }
-  ],
-  "minimum-stability": "dev",
-  "require": {
-    "php": ">=7.1",
-    "kokspflanze/zfc-twig": "@stable",
-    "twig/twig": "^2.8.1",
-    "twig/extensions": "@stable",
-    "zendframework/zend-servicemanager": "@stable",
-    "zendframework/zend-mvc-i18n": "@stable",
-    "zendframework/zend-mvc": "@stable",
-    "zendframework/zend-view": "@stable",
-    "ext-gettext": "*"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^6@stable",
-    "codacy/coverage": "^1.0"
-  },
-  "autoload": {
-    "psr-0": {
-      "CirclicalTwigTrans\\": "src/"
-    }
-  }
 }

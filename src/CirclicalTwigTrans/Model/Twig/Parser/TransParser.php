@@ -5,14 +5,10 @@ namespace CirclicalTwigTrans\Model\Twig\Parser;
 use CirclicalTwigTrans\Model\Twig\TransNode;
 use Twig\Error\SyntaxError;
 use Twig\Node\Expression\NameExpression;
+use Twig\Node\Node;
 use Twig\Node\PrintNode;
 use Twig\Node\TextNode;
 use Twig\Token;
-use Twig_Token;
-use Twig_Node;
-use Twig_Node_Text;
-use Twig_Node_Print;
-use Twig_Node_Expression_Name;
 
 
 class TransParser extends \Twig\TokenParser\AbstractTokenParser
@@ -96,7 +92,7 @@ class TransParser extends \Twig\TokenParser\AbstractTokenParser
         return 'trans';
     }
 
-    protected function checkTransString(Twig_Node $body, $lineno)
+    protected function checkTransString(Node $body, $lineno)
     {
         foreach ($body as $i => $node) {
             if ($node instanceof TextNode || ($node instanceof PrintNode && $node->getNode('expr') instanceof NameExpression)) {

@@ -17,7 +17,7 @@ namespace CirclicalTwigTrans\Test\Loader;
  *
  * @author Saša Stamenković <umpirsky@gmail.com>
  */
-class Filesystem extends \Twig_Loader_Filesystem
+class Filesystem extends \Twig\Loader\FilesystemLoader
 {
     /**
      * Hacked find template to allow loading templates by absolute path.

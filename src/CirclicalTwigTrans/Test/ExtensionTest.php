@@ -4,10 +4,11 @@ namespace CirclicalTwigTrans\Test;
 
 use CirclicalTwigTrans\Model\Twig\Trans;
 use CirclicalTwigTrans\Model\Twig\TransDefaultDomain;
-use Twig_Environment;
-use Twig_Loader_Chain;
-use Zend\Mvc\I18n\Translator;
-use Zend\View\View;
+use Twig\Environment;
+use Twig\Loader\ChainLoader;
+use Laminas\Mvc\I18n\Translator;
+use Laminas\View\View;
+use Twig\Token;
 use ZfcTwig\View\TwigRenderer;
 use PHPUnit\Framework\TestCase;
 use ZfcTwig\View\TwigResolver;
@@ -20,16 +21,16 @@ class ExtensionTest extends TestCase
     {
         $filesystem = new Filesystem('/', __DIR__ . '/Fixtures/twig');
         $filesystem->prependPath(__DIR__ . '/Fixtures/twig');
-        $chain = new Twig_Loader_Chain();
+        $chain = new ChainLoader();
         $chain->addLoader($filesystem);
-        $environment = new Twig_Environment($chain);
+        $environment = new Environment($chain);
 
         foreach ($variables as $key => $value) {
             $environment->addGlobal($key, $value);
         }
 
         $renderer = new TwigRenderer(new View, $chain, $environment, new TwigResolver($environment));
-        $environment->addExtension(new \Twig_Extensions_Extension_I18n());
+//        $environment->addExtension(new \Twig_Extensions_Extension_I18n());
         $environment->addExtension(new Trans($renderer, $this->getTranslator()));
         $environment->addExtension(new TransDefaultDomain($renderer));
 
@@ -116,7 +117,7 @@ class ExtensionTest extends TestCase
     {
 
         $trans = new Trans($this->getRenderer(), $this->getTranslator());
-        $token = new \Twig_Token(\Twig_Token::NAME_TYPE, 'endtrans', 0);
+        $token = new Token(Token::NAME_TYPE, 'endtrans', 0);
         $result = $trans->decideForEnd($token);
         $this->assertTrue($result);
     }
@@ -124,7 +125,7 @@ class ExtensionTest extends TestCase
     public function testCanDecideForFork()
     {
         $trans = new Trans($this->getRenderer(), $this->getTranslator());
-        $token = new \Twig_Token(\Twig_Token::NAME_TYPE, 'plural', 0);
+        $token = new Token(Token::NAME_TYPE, 'plural', 0);
         $result = $trans->decideForFork($token);
         $this->assertTrue($result);
     }

@@ -4,7 +4,7 @@ namespace CirclicalTwigTrans\Model\Twig;
 
 use CirclicalTwigTrans\Model\Twig\Parser\TransParser;
 use Twig\Token;
-use Zend\Mvc\I18n\Translator;
+use Laminas\Mvc\I18n\Translator;
 use ZfcTwig\Twig\Extension;
 use ZfcTwig\View\TwigRenderer;
 
@@ -38,7 +38,7 @@ class Trans extends Extension
         return $token->test('endtrans');
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'circlical-translator';
     }

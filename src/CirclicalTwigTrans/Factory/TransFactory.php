@@ -4,7 +4,7 @@ namespace CirclicalTwigTrans\Factory;
 
 use CirclicalTwigTrans\Model\Twig\Trans;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class TransFactory implements FactoryInterface
 {

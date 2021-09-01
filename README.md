@@ -165,7 +165,7 @@ Included tests support all flavors of trans, adding direct support for domain ov
 Usage in controllers doesn't change.
 
 ```php
-/** @var Zend\I18n\Translator\Translator $tr */
+/** @var Laminas\I18n\Translator\Translator $tr */
 $tr = $sm->get('translator');
 
 $tr->translate( 'Home' );

@@ -5,7 +5,7 @@ namespace CirclicalTwigTrans\Factory;
 use CirclicalTwigTrans\Model\Twig\Trans;
 use CirclicalTwigTrans\Model\Twig\TransDefaultDomain;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class TransDefaultDomainFactory implements FactoryInterface
 {

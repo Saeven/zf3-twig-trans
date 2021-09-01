@@ -6,9 +6,9 @@ namespace CirclicalTwigTrans\Model\Twig;
 use Twig\Environment;
 use Twig\Node\ModuleNode;
 use Twig\Node\Node;
-use Twig_NodeInterface;
+use Twig\NodeVisitor\AbstractNodeVisitor;
 
-class TranslationDefaultDomainNodeVisitor implements \Twig_NodeVisitorInterface
+class TranslationDefaultDomainNodeVisitor extends AbstractNodeVisitor
 {
 
     private $defaultDomain;
@@ -16,7 +16,7 @@ class TranslationDefaultDomainNodeVisitor implements \Twig_NodeVisitorInterface
     /**
      * Called before child nodes are visited.
      */
-    public function enterNode(Node $node, Environment $env): Node
+    public function doEnterNode(Node $node, Environment $env): Node
     {
         if ($domain = $this->getDefaultDomain($node)) {
             $this->defaultDomain = $domain;
@@ -38,11 +38,10 @@ class TranslationDefaultDomainNodeVisitor implements \Twig_NodeVisitorInterface
         return null;
     }
 
-
     /**
      * Called after child nodes are visited.
      */
-    public function leaveNode(Node $node, Environment $env)
+    public function doLeaveNode(Node $node, Environment $env)
     {
         if ($node instanceof ModuleNode) {
             $this->defaultDomain = null;
