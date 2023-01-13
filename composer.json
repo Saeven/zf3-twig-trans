@@ -23,6 +23,7 @@
   "require": {
     "php": "~8.0.12 || ~8.1.0 || ~8.2.0",
     "ext-gettext": "*",
+    "ext-intl": "*",
     "kokspflanze/zfc-twig": "^4.1.1",
     "twig/twig": "^3.0.1",
     "symfony/twig-bridge": "@stable",
