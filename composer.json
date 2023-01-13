@@ -27,9 +27,9 @@
     "twig/twig": "^3.0.1",
     "symfony/twig-bridge": "@stable",
     "laminas/laminas-servicemanager": "@stable",
-    "laminas/laminas-mvc-i18n": "@stable",
-    "laminas/laminas-mvc": "@stable",
-    "laminas/laminas-view": "@stable",
+    "laminas/laminas-mvc-i18n": "1.7.0",
+    "laminas/laminas-mvc": "^3.6.0",
+    "laminas/laminas-view": "^2.25.2",
     "laminas/laminas-coding-standard": "^2.5.0",
     "psr/container": "*"
   },
