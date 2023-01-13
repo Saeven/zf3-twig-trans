@@ -19,7 +19,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: xdebug, gettext
+          extensions: xdebug, gettext, intl
         env:
           fail-fast: false
       # Composer Install
@@ -27,7 +27,7 @@ jobs:
         uses: php-actions/composer@v5
         with:
           php_version: ${{ matrix.php-versions }}
-          php_extensions: xdebug gettext
+          php_extensions: xdebug gettext intl
           dev: yes
           interaction: no
           args: --prefer-source
