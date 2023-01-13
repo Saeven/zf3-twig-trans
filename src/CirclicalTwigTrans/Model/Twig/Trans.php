@@ -1,17 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CirclicalTwigTrans\Model\Twig;
 
 use CirclicalTwigTrans\Model\Twig\Parser\TransParser;
-use Twig\Token;
 use Laminas\Mvc\I18n\Translator;
+use Twig\Token;
 use ZfcTwig\Twig\Extension;
 use ZfcTwig\View\TwigRenderer;
 
+use function putenv;
+use function setlocale;
+
+use const LC_MESSAGES;
+
 class Trans extends Extension
 {
-
-    protected $translator;
+    protected Translator $translator;
 
     public function __construct(TwigRenderer $renderer, Translator $translator)
     {
@@ -19,7 +25,7 @@ class Trans extends Extension
         $this->translator = $translator;
     }
 
-    public function getTokenParsers()
+    public function getTokenParsers(): array
     {
         $locale = $this->translator->getLocale();
         putenv('LANG=' . $locale);
@@ -28,12 +34,12 @@ class Trans extends Extension
         return [new TransParser()];
     }
 
-    public function decideForFork(Token $token)
+    public function decideForFork(Token $token): bool
     {
         return $token->test(['plural', 'from', 'notes', 'endtrans']);
     }
 
-    public function decideForEnd(Token $token)
+    public function decideForEnd(Token $token): bool
     {
         return $token->test('endtrans');
     }

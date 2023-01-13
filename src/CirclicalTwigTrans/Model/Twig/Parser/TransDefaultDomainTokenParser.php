@@ -1,19 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CirclicalTwigTrans\Model\Twig\Parser;
 
 use CirclicalTwigTrans\Model\Twig\TransDefaultDomainNode;
 use Twig\Token;
 use Twig\TokenParser\AbstractTokenParser;
 
-/**
- * Token Parser for the 'trans_default_domain' tag.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- */
 class TransDefaultDomainTokenParser extends AbstractTokenParser
 {
-    public function parse(Token $token)
+    public function parse(Token $token): TransDefaultDomainNode
     {
         $expr = $this->parser->getExpressionParser()->parseExpression();
 

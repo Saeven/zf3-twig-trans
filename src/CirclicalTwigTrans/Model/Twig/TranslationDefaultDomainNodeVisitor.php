@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace CirclicalTwigTrans\Model\Twig;
 
@@ -10,8 +11,7 @@ use Twig\NodeVisitor\AbstractNodeVisitor;
 
 class TranslationDefaultDomainNodeVisitor extends AbstractNodeVisitor
 {
-
-    private $defaultDomain;
+    private ?string $defaultDomain = null;
 
     /**
      * Called before child nodes are visited.
@@ -29,7 +29,7 @@ class TranslationDefaultDomainNodeVisitor extends AbstractNodeVisitor
         return $node;
     }
 
-    private function getDefaultDomain(Node $node)
+    private function getDefaultDomain(Node $node): ?string
     {
         if ($node instanceof TransDefaultDomainNode) {
             return $node->getDomain();
@@ -41,7 +41,7 @@ class TranslationDefaultDomainNodeVisitor extends AbstractNodeVisitor
     /**
      * Called after child nodes are visited.
      */
-    public function doLeaveNode(Node $node, Environment $env)
+    public function doLeaveNode(Node $node, Environment $env): Node
     {
         if ($node instanceof ModuleNode) {
             $this->defaultDomain = null;

@@ -47,49 +47,49 @@ class ExtensionTest extends TestCase
     public function testRenderBasic()
     {
         $content = $this->getRenderer()->render('/basic.twig');
-        $this->assertInternalType('string', $content);
+        $this->assertIsString($content);
         $this->assertStringEqualsFile(__DIR__ . '/Fixtures/twig/basic.twig', $content);
     }
 
     public function testRenderSimpleTrans()
     {
         $content = $this->getRenderer()->render('/simpletrans.twig');
-        $this->assertInternalType('string', $content);
+        $this->assertIsString($content);
         $this->assertStringEqualsFile(__DIR__ . '/Fixtures/result/simpletrans.txt', $content);
     }
 
     public function testRenderPluralTransSingular()
     {
         $content = $this->getRenderer(['ducks' => 1])->render('/trans-plural.twig');
-        $this->assertInternalType('string', $content);
+        $this->assertIsString($content);
         $this->assertStringEqualsFile(__DIR__ . '/Fixtures/result/trans-singular-1.txt', $content);
     }
 
     public function testRenderPluralTransPlural()
     {
         $content = $this->getRenderer(['ducks' => 2])->render('/trans-plural.twig');
-        $this->assertInternalType('string', $content);
+        $this->assertIsString($content);
         $this->assertStringEqualsFile(__DIR__ . '/Fixtures/result/trans-singular-2.txt', $content);
     }
 
     public function testRenderWithAttributes()
     {
         $content = $this->getRenderer()->render('/trans-with-notes.twig');
-        $this->assertInternalType('string', $content);
+        $this->assertIsString($content);
         $this->assertStringEqualsFile(__DIR__ . '/Fixtures/result/trans-with-notes.txt', $content);
     }
 
     public function testRenderWithVariable()
     {
         $content = $this->getRenderer()->render('/trans-with-variable.twig');
-        $this->assertInternalType('string', $content);
+        $this->assertIsString($content);
         $this->assertStringEqualsFile(__DIR__ . '/Fixtures/result/trans-with-variable.txt', $content);
     }
 
     public function testRenderInlineTrans()
     {
         $content = $this->getRenderer()->render('/trans-inline.twig');
-        $this->assertInternalType('string', $content);
+        $this->assertIsString($content);
         $this->assertStringEqualsFile(__DIR__ . '/Fixtures/result/trans-inline.txt', $content);
     }
 
@@ -102,20 +102,19 @@ class ExtensionTest extends TestCase
         bind_textdomain_codeset('domain', 'UTF-8');
 
         $content = $this->getRenderer()->render('/trans-with-domain.twig');
-        $this->assertInternalType('string', $content);
+        $this->assertIsString($content);
         $this->assertStringEqualsFile(__DIR__ . '/Fixtures/result/trans-with-domain.txt', $content);
     }
 
     public function testRenderPluralWithNotes()
     {
         $content = $this->getRenderer(['totalNotes' => 1])->render('/trans-plural-with-notes.twig');
-        $this->assertInternalType('string', $content);
+        $this->assertIsString($content);
         $this->assertStringEqualsFile(__DIR__ . '/Fixtures/result/trans-plural-with-notes.txt', $content);
     }
 
     public function testCanDecideForEnd()
     {
-
         $trans = new Trans($this->getRenderer(), $this->getTranslator());
         $token = new Token(Token::NAME_TYPE, 'endtrans', 0);
         $result = $trans->decideForEnd($token);
@@ -133,14 +132,14 @@ class ExtensionTest extends TestCase
     public function testSimpleTransWithDefaultDomain()
     {
         $content = $this->getRenderer()->render('/simpletrans-defaultdomain.twig');
-        $this->assertInternalType('string', $content);
+        $this->assertIsString($content);
         $this->assertStringEqualsFile(__DIR__ . '/Fixtures/result/trans-with-domain.txt', $content);
     }
 
     public function testIncludeTransWithDefaultDomain()
     {
         $content = $this->getRenderer()->render('/trans-with-include.twig');
-        $this->assertInternalType('string', $content);
+        $this->assertIsString($content);
         $this->assertStringEqualsFile(__DIR__ . '/Fixtures/result/trans-with-include.txt', $content);
     }
 }

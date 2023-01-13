@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CirclicalTwigTrans\Model\Twig\Parser;
 
 use CirclicalTwigTrans\Model\Twig\TransNode;
@@ -9,18 +11,19 @@ use Twig\Node\Node;
 use Twig\Node\PrintNode;
 use Twig\Node\TextNode;
 use Twig\Token;
+use Twig\TokenParser\AbstractTokenParser;
 
+use function sprintf;
 
-class TransParser extends \Twig\TokenParser\AbstractTokenParser
+class TransParser extends AbstractTokenParser
 {
-
     private const DECIDE_FORK = 'decideForFork';
     private const DECIDE_END = 'decideForEnd';
 
     /**
      * Parses a token and returns a node.
      */
-    public function parse(Token $token)
+    public function parse(Token $token): TransNode
     {
         $lineNumber = $token->getLine();
         $stream = $this->parser->getStream();
@@ -29,7 +32,6 @@ class TransParser extends \Twig\TokenParser\AbstractTokenParser
         $notes = null;
         $textDomain = null;
         $initialBlock = false;
-
 
         if (!$stream->test(Token::BLOCK_END_TYPE)) {
             if ($stream->nextIf(Token::NAME_TYPE, 'from')) {
@@ -70,29 +72,25 @@ class TransParser extends \Twig\TokenParser\AbstractTokenParser
         return new TransNode($body, $textDomain, $plural, $count, $notes, $lineNumber, $this->getTag());
     }
 
-    public function decideForFork(Token $token)
+    public function decideForFork(Token $token): bool
     {
         return $token->test(['plural', 'notes', 'endtrans']);
     }
 
-    public function decideForEnd(Token $token)
+    public function decideForEnd(Token $token): bool
     {
         return $token->test('endtrans');
     }
 
     /**
      * Gets the tag name associated with this token parser.
-     *
-     * @param string The tag name
-     *
-     * @return string
      */
-    public function getTag()
+    public function getTag(): string
     {
         return 'trans';
     }
 
-    protected function checkTransString(Node $body, $lineno)
+    protected function checkTransString(Node $body, int $lineno)
     {
         foreach ($body as $i => $node) {
             if ($node instanceof TextNode || ($node instanceof PrintNode && $node->getNode('expr') instanceof NameExpression)) {

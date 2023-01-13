@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CirclicalTwigTrans\Model\Twig;
 
+use CirclicalTwigTrans\Exception\BlankTranslationException;
 use CirclicalTwigTrans\Model\Twig\Parser\TransParser;
+use Exception;
 use Twig\Compiler;
 use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Expression\ConstantExpression;
@@ -10,8 +14,14 @@ use Twig\Node\Expression\FilterExpression;
 use Twig\Node\Expression\NameExpression;
 use Twig\Node\Expression\TempNameExpression;
 use Twig\Node\Node;
-use CirclicalTwigTrans\Exception\BlankTranslationException;
 use Twig\Node\PrintNode;
+use Twig\Node\SetNode;
+
+use function array_merge;
+use function count;
+use function sprintf;
+use function str_replace;
+use function trim;
 
 class TransNode extends Node
 {
@@ -20,11 +30,11 @@ class TransNode extends Node
     private const TYPE_NAME = 'name';
     private const TYPE_DATA = 'data';
 
-    private $domain;
+    private ?string $domain;
 
-    private $defaultDomain;
+    private ?string $defaultDomain;
 
-    public function __construct(Node $body, $domain, ?Node $plural = null, ?AbstractExpression $count = null, ?Node $notes = null, $line_number, $tag = null)
+    public function __construct(Node $body, ?string $domain, ?Node $plural = null, ?AbstractExpression $count = null, ?Node $notes = null, int $lineNumber = 0, ?string $tag = null)
     {
         $nodes = [
             'body' => $body,
@@ -45,14 +55,14 @@ class TransNode extends Node
         parent::__construct(
             $nodes,
             [],
-            $line_number,
+            $lineNumber,
             $tag
         );
 
         $this->domain = $domain;
     }
 
-    public function setDefaultDomain(?string $defaultDomain)
+    public function setDefaultDomain(?string $defaultDomain): void
     {
         $this->defaultDomain = $defaultDomain;
     }
@@ -60,34 +70,30 @@ class TransNode extends Node
     /**
      * Returns the token parser instances to add to the existing list.
      */
-    public function getTokenParsers()
+    public function getTokenParsers(): array
     {
         return [new TransParser()];
     }
 
-
     /**
      * Compiles the node to PHP.
      */
-    public function compile(Compiler $compiler)
+    public function compile(Compiler $compiler): void
     {
         $compiler->addDebugInfo($this);
 
-        /**
-         * @var Node $msg
-         * @var Node $msg1
-         */
         try {
+            /** @var Node $msg */
             [$msg, $vars] = $this->compileString($this->getNode('body'));
 
             if ($this->hasNode(self::TYPE_PLURAL)) {
+                /** * @var Node $msg1 */
                 [$msg1, $vars1] = $this->compileString($this->getNode(self::TYPE_PLURAL));
                 $vars = array_merge($vars, $vars1);
             }
         } catch (BlankTranslationException $x) {
-            throw new \Exception($x->getMessage() . ' at line ' . $x->getCode() . ' in ' . $compiler->getFilename());
+            throw new Exception($x->getMessage() . ' at line ' . $x->getCode());
         }
-
 
         $isPlural = $this->hasNode(self::TYPE_PLURAL);
         $translationDomain = null;
@@ -104,7 +110,6 @@ class TransNode extends Node
             $function = $isPlural ? 'dngettext' : 'dgettext';
         } else {
             $function = $isPlural ? 'ngettext' : 'gettext';
-
         }
 
         // handle notes
@@ -155,7 +160,6 @@ class TransNode extends Node
             }
 
             $compiler->raw("));\n");
-
         } else {
             $compiler->write('echo ' . $function . '(');
             if ($translationDomain) {
@@ -184,22 +188,21 @@ class TransNode extends Node
      */
     protected function compileString(Node $body)
     {
-
         if ($body instanceof NameExpression || $body instanceof ConstantExpression || $body instanceof TempNameExpression) {
             if ($body instanceof ConstantExpression && !trim($body->getAttribute('value'))) {
-                throw new BlankTranslationException('You are attempting to translate an empty string', $body->getLine());
+                throw new BlankTranslationException('You are attempting to translate an empty string', $body->getTemplateLine());
             }
 
             return [$body, []];
         }
 
         $vars = [];
-        if (\count($body)) {
+        if (count($body)) {
             $msg = '';
 
             foreach ($body as $node) {
-                if (\get_class($node) === Node::class && $node->getNode(0) instanceof \Twig\Node\SetNode) {
-                    $node = $node->getNode(1);
+                if ($node::class === Node::class && $node->getNode('0') instanceof SetNode) {
+                    $node = $node->getNode('1');
                 }
 
                 if ($node instanceof PrintNode) {
@@ -221,10 +224,9 @@ class TransNode extends Node
         }
 
         if (!trim($msg)) {
-            throw new BlankTranslationException('You are attempting to translate a blank string', $body->getLine());
+            throw new BlankTranslationException('You are attempting to translate a blank string', $body->getTemplateLine());
         }
 
         return [new Node([new ConstantExpression(trim($msg), $body->getTemplateLine())]), $vars];
     }
-
 }
