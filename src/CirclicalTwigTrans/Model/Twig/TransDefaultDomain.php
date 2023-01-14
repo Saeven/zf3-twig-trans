@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CirclicalTwigTrans\Model\Twig;
 
 use CirclicalTwigTrans\Model\Twig\Parser\TransDefaultDomainTokenParser;
@@ -8,22 +10,19 @@ use ZfcTwig\View\TwigRenderer;
 
 class TransDefaultDomain extends Extension
 {
-
-    protected $translator;
-
     public function __construct(TwigRenderer $renderer)
     {
         parent::__construct($renderer);
     }
 
-    public function getTokenParsers()
+    public function getTokenParsers(): array
     {
         return [
             new TransDefaultDomainTokenParser(),
         ];
     }
 
-    public function getNodeVisitors()
+    public function getNodeVisitors(): array
     {
         return [
             new TranslationDefaultDomainNodeVisitor(),
@@ -35,5 +34,3 @@ class TransDefaultDomain extends Extension
         return 'circlical-translatordomain';
     }
 }
-
- 

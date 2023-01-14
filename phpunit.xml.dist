@@ -11,19 +11,20 @@
             <directory>./src/CirclicalTwigTrans/Test/</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+    <coverage includeUncoveredFiles="true"
+              processUncoveredFiles="true">
+        <include>
             <directory suffix=".php">./src/CirclicalTwigTrans</directory>
-            <exclude>
-                <directory suffix=".php">./src/CirclicalTwigTrans/Test</directory>
-                <directory suffix=".php">./src/CirclicalTwigTrans/Exception</directory>
-                <file>./src/CirclicalTwigTrans/Factory/TransFactory.php</file>
-            </exclude>
-        </whitelist>
-    </filter>
-    <logging>
-        <log type="coverage-clover" target="tests/_reports/logs/clover.xml"/>
-        <log type="coverage-html" target="tests/_reports/coverage" charset="UTF-8" yui="true" highlight="true" lowUpperBound="35" highLowerBound="70"/>
-        <log type="testdox-text" target="tests/_reports/testdox/executed.txt"/>
-    </logging>
+        </include>
+        <exclude>
+            <directory suffix=".php">./src/CirclicalTwigTrans/Test</directory>
+            <directory suffix=".php">./src/CirclicalTwigTrans/Exception</directory>
+            <file>./src/CirclicalTwigTrans/Factory/TransFactory.php</file>
+            <file>./src/CirclicalTwigTrans/Factory/TransDefaultDomainFactory.php</file>
+        </exclude>
+        <report>
+            <clover outputFile="tests/_reports/logs/clover.xml"/>
+            <html outputDirectory="tests/_reports/coverage"/>
+        </report>
+    </coverage>
 </phpunit>
